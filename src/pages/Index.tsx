@@ -1,143 +1,155 @@
-import { Heart, Sparkles, Users, Shield } from "lucide-react";
+import { Heart, MessageCircle, Users, Zap, MapPin, Sparkles, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { HamburgerMenu } from "@/components/navigation/HamburgerMenu";
 import { BottomNavigation } from "@/components/navigation/BottomNavigation";
-import heroImage from "@/assets/hero-image.jpg";
+import { Link } from "react-router-dom";
 
 const Index = () => {
-  const features = [
+  const todayStats = {
+    newLikes: 12,
+    newMatches: 3,
+    newMessages: 8
+  };
+
+  const quickActions = [
     {
       icon: Heart,
-      title: "Smart Matching",
-      description: "Our AI finds your perfect match based on compatibility",
-      gradient: "from-primary to-accent"
+      title: "Start Swiping",
+      description: "Discover new people",
+      path: "/discover",
+      gradient: "from-primary to-accent",
+      count: "50+ nearby"
+    },
+    {
+      icon: MessageCircle,
+      title: "Messages",
+      description: "Continue conversations",
+      path: "/messages",
+      gradient: "from-accent to-primary-glow",
+      count: `${todayStats.newMessages} new`
     },
     {
       icon: Users,
-      title: "Real Connections",
-      description: "Meet genuine people looking for meaningful relationships",
-      gradient: "from-accent to-primary-glow"
-    },
-    {
-      icon: Shield,
-      title: "Safe & Secure",
-      description: "Your privacy and safety are our top priorities",
-      gradient: "from-primary-glow to-primary"
+      title: "Matches",
+      description: "See who likes you",
+      path: "/matches",
+      gradient: "from-primary-glow to-primary",
+      count: `${todayStats.newMatches} new`
     }
   ];
 
+  const nearbyUsers = [
+    { name: "Sarah", distance: "0.5 miles", avatar: "bg-gradient-to-br from-primary to-accent" },
+    { name: "Maya", distance: "1.2 miles", avatar: "bg-gradient-to-br from-accent to-primary-glow" },
+    { name: "Emma", distance: "2.1 miles", avatar: "bg-gradient-to-br from-primary-glow to-primary" },
+    { name: "Sophie", distance: "3.4 miles", avatar: "bg-gradient-to-br from-primary to-primary-glow" }
+  ];
+
   return (
-    <div className="min-h-screen bg-gradient-soft">
-      {/* Header with hamburger menu */}
-      <div className="absolute top-6 left-6 z-10">
+    <div className="min-h-screen bg-gradient-soft pb-20">
+      {/* Header */}
+      <div className="flex items-center justify-between p-6 bg-gradient-primary">
         <HamburgerMenu />
-      </div>
-
-      {/* Hero Section */}
-      <div 
-        className="relative min-h-screen flex items-center justify-center bg-gradient-hero"
-        style={{
-          backgroundImage: `linear-gradient(135deg, rgba(236, 72, 153, 0.8), rgba(251, 146, 60, 0.8)), url(${heroImage})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center'
-        }}
-      >
-        <div className="absolute inset-0 bg-gradient-hero opacity-60" />
         
-        <div className="relative z-10 text-center px-6 max-w-lg">
-          <div className="mb-8">
-            <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
-              <Sparkles className="h-5 w-5 text-white animate-pulse" />
-              <span className="text-white font-medium">Find Your Perfect Match</span>
-            </div>
-            
-            <h1 className="text-5xl font-bold text-white mb-4 leading-tight">
-              Love Starts
-              <br />
-              <span className="text-white/90">Here</span>
-            </h1>
-            
-            <p className="text-white/90 text-lg leading-relaxed mb-8">
-              Connect with amazing people nearby. Start meaningful conversations and find your perfect match today.
-            </p>
-          </div>
-
-          <div className="space-y-4">
-            <Button variant="hero" size="lg" className="w-full max-w-sm text-lg py-6">
-              <Heart className="h-6 w-6 mr-2" />
-              Start Matching
-            </Button>
-            
-            <Button variant="romantic" size="lg" className="w-full max-w-sm">
-              Learn More
-            </Button>
-          </div>
-
-          <div className="flex items-center justify-center gap-6 mt-8 text-white/80">
-            <div className="text-center">
-              <div className="text-2xl font-bold">10M+</div>
-              <div className="text-sm">Active Users</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold">2M+</div>
-              <div className="text-sm">Matches Daily</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold">50K+</div>
-              <div className="text-sm">Success Stories</div>
-            </div>
+        <div className="text-center">
+          <h1 className="text-white text-xl font-bold">LoveConnect</h1>
+          <div className="flex items-center gap-1 text-white/80 text-sm">
+            <MapPin className="h-3 w-3" />
+            <span>San Francisco, CA</span>
           </div>
         </div>
+
+        <Button size="icon" variant="ghost" className="text-white hover:bg-white/20">
+          <Zap className="h-5 w-5" />
+        </Button>
       </div>
 
-      {/* Features Section */}
-      <div className="py-20 px-6">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-foreground mb-4">
-              Why Choose LoveConnect?
-            </h2>
-            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-              We're more than just a dating app. We're your partner in finding genuine, lasting connections.
-            </p>
+      <div className="px-6 py-6 space-y-6">
+        {/* Today's Activity */}
+        <Card className="p-6 bg-white/80 backdrop-blur-sm border-white/20">
+          <div className="flex items-center gap-2 mb-4">
+            <Sparkles className="h-5 w-5 text-primary" />
+            <h2 className="text-lg font-semibold text-foreground">Today's Activity</h2>
           </div>
+          
+          <div className="grid grid-cols-3 gap-4">
+            <div className="text-center">
+              <div className="text-2xl font-bold text-primary mb-1">{todayStats.newLikes}</div>
+              <div className="text-xs text-muted-foreground">New Likes</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-primary mb-1">{todayStats.newMatches}</div>
+              <div className="text-xs text-muted-foreground">New Matches</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-primary mb-1">{todayStats.newMessages}</div>
+              <div className="text-xs text-muted-foreground">New Messages</div>
+            </div>
+          </div>
+        </Card>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            {features.map((feature, index) => (
-              <Card 
-                key={index}
-                className="p-8 text-center hover:shadow-glow-soft transition-all duration-300 bg-white/80 backdrop-blur-sm border-white/20"
-              >
-                <div className={`w-16 h-16 bg-gradient-to-br ${feature.gradient} rounded-full flex items-center justify-center mx-auto mb-6 shadow-glow-soft`}>
-                  <feature.icon className="h-8 w-8 text-white" />
+        {/* Quick Actions */}
+        <div>
+          <h2 className="text-lg font-semibold text-foreground mb-4">Quick Actions</h2>
+          <div className="space-y-3">
+            {quickActions.map((action, index) => (
+              <Link key={index} to={action.path}>
+                <Card className="p-4 hover:shadow-glow-soft transition-all duration-300 bg-white/80 backdrop-blur-sm border-white/20">
+                  <div className="flex items-center gap-4">
+                    <div className={`w-12 h-12 bg-gradient-to-br ${action.gradient} rounded-full flex items-center justify-center shadow-glow-soft`}>
+                      <action.icon className="h-6 w-6 text-white" />
+                    </div>
+                    
+                    <div className="flex-1">
+                      <h3 className="font-semibold text-foreground">{action.title}</h3>
+                      <p className="text-sm text-muted-foreground">{action.description}</p>
+                    </div>
+                    
+                    <div className="text-right">
+                      <div className="text-sm font-medium text-primary">{action.count}</div>
+                      <TrendingUp className="h-4 w-4 text-primary ml-auto" />
+                    </div>
+                  </div>
+                </Card>
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        {/* Nearby Users */}
+        <div>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-lg font-semibold text-foreground">People Nearby</h2>
+            <Link to="/discover">
+              <Button variant="romantic" size="sm">See All</Button>
+            </Link>
+          </div>
+          
+          <div className="flex gap-3 overflow-x-auto pb-2">
+            {nearbyUsers.map((user, index) => (
+              <Card key={index} className="flex-shrink-0 w-24 p-3 text-center hover:shadow-glow-soft transition-all duration-300 bg-white/80 backdrop-blur-sm border-white/20">
+                <div className={`w-12 h-12 ${user.avatar} rounded-full flex items-center justify-center mx-auto mb-2 shadow-glow-soft`}>
+                  <span className="text-white font-semibold text-sm">{user.name[0]}</span>
                 </div>
-                <h3 className="text-xl font-semibold text-foreground mb-3">
-                  {feature.title}
-                </h3>
-                <p className="text-muted-foreground leading-relaxed">
-                  {feature.description}
-                </p>
+                <div className="text-xs font-medium text-foreground truncate">{user.name}</div>
+                <div className="text-xs text-muted-foreground">{user.distance}</div>
               </Card>
             ))}
           </div>
         </div>
-      </div>
 
-      {/* CTA Section */}
-      <div className="py-20 px-6 bg-gradient-primary">
-        <div className="max-w-lg mx-auto text-center">
-          <Heart className="h-16 w-16 text-white mx-auto mb-6 animate-float" />
-          <h2 className="text-3xl font-bold text-white mb-4">
-            Ready to Find Love?
-          </h2>
-          <p className="text-white/90 text-lg mb-8">
-            Join millions of people who found their perfect match on LoveConnect.
+        {/* Premium Upsell */}
+        <Card className="p-6 bg-gradient-primary text-center">
+          <Heart className="h-10 w-10 text-white mx-auto mb-3 animate-float" />
+          <h3 className="text-lg font-semibold text-white mb-2">Boost Your Profile</h3>
+          <p className="text-white/80 text-sm mb-4">
+            Get 10x more matches with LoveConnect Premium
           </p>
-          <Button variant="romantic" size="lg" className="bg-white text-primary hover:bg-white/90">
-            Get Started Now
+          <Button variant="romantic" className="bg-white text-primary hover:bg-white/90">
+            Try Premium Free
           </Button>
-        </div>
+        </Card>
       </div>
 
       <BottomNavigation />
