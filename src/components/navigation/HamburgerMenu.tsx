@@ -62,7 +62,7 @@ export function HamburgerMenu() {
           <div className="p-4 bg-gradient-primary rounded-lg text-center">
             <h3 className="font-semibold text-white mb-1">Premium</h3>
             <p className="text-xs text-white/80 mb-3">Unlock unlimited likes & more</p>
-            <Button variant="romantic" size="sm" className="w-full">
+            <Button variant="masq" size="sm" className="w-full">
               Upgrade Now
             </Button>
           </div>

@@ -61,7 +61,7 @@ export default function Discover() {
 
           <Button 
             size="icon" 
-            variant="hero" 
+            variant="mystery" 
             className="h-16 w-16 rounded-full animate-pulse-glow"
           >
             <Heart className="h-7 w-7" />

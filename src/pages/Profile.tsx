@@ -21,7 +21,7 @@ export default function Profile() {
               </div>
               <Button 
                 size="icon" 
-                variant="hero" 
+                variant="mystery" 
                 className="absolute bottom-2 right-2 h-10 w-10 rounded-full shadow-glow"
               >
                 <Camera className="h-5 w-5" />
@@ -75,12 +75,12 @@ export default function Profile() {
         </Card>
 
         <div className="space-y-3">
-          <Button variant="hero" className="w-full" size="lg">
+          <Button variant="mystery" className="w-full" size="lg">
             <Edit3 className="h-5 w-5 mr-2" />
             Edit Profile
           </Button>
           
-          <Button variant="romantic" className="w-full" size="lg">
+          <Button variant="masq" className="w-full" size="lg">
             <Settings className="h-5 w-5 mr-2" />
             Settings
           </Button>
@@ -92,7 +92,7 @@ export default function Profile() {
           <p className="text-white/80 text-sm mb-3">
             Upgrade to Premium for unlimited likes
           </p>
-          <Button variant="romantic" size="sm">
+          <Button variant="masq" size="sm">
             Upgrade Now
           </Button>
         </Card>

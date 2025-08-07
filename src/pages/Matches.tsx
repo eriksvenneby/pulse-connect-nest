@@ -45,7 +45,7 @@ export default function Matches() {
                     <h3 className="font-semibold text-foreground mb-1">
                       {match.name}, {match.age}
                     </h3>
-                    <Button variant="hero" size="sm" className="w-full">
+                    <Button variant="mystery" size="sm" className="w-full">
                       <MessageCircle className="h-4 w-4 mr-1" />
                       Message
                     </Button>
@@ -77,7 +77,7 @@ export default function Matches() {
                   <h3 className="font-semibold text-foreground mb-1">
                     {match.name}, {match.age}
                   </h3>
-                  <Button variant="romantic" size="sm" className="w-full">
+                  <Button variant="masq" size="sm" className="w-full">
                     View Profile
                   </Button>
                 </div>
@@ -93,7 +93,7 @@ export default function Matches() {
             </div>
             <h3 className="text-lg font-semibold text-foreground mb-2">No matches yet</h3>
             <p className="text-muted-foreground mb-6">Keep swiping to find your perfect match!</p>
-            <Button variant="hero">Start Discovering</Button>
+            <Button variant="mystery">Start Discovering</Button>
           </div>
         )}
       </div>

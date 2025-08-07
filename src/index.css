@@ -8,51 +8,53 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Dating app color palette - warm romantic gradients */
-    --background: 0 0% 98%;
-    --foreground: 340 15% 15%;
+    /* Masq dark theme - mysterious and elegant */
+    --background: 220 15% 8%;
+    --foreground: 300 20% 95%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 340 15% 15%;
+    --card: 220 15% 12%;
+    --card-foreground: 300 15% 90%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 340 15% 15%;
+    --popover: 220 15% 12%;
+    --popover-foreground: 300 15% 90%;
 
-    /* Primary: vibrant pink-red */
-    --primary: 340 85% 60%;
-    --primary-foreground: 0 0% 100%;
-    --primary-glow: 340 85% 70%;
+    /* Primary: vibrant purple-pink */
+    --primary: 300 85% 65%;
+    --primary-foreground: 220 15% 8%;
+    --primary-glow: 300 85% 75%;
 
-    /* Secondary: soft coral */
-    --secondary: 15 75% 85%;
-    --secondary-foreground: 340 15% 15%;
+    /* Secondary: darker card */
+    --secondary: 220 15% 16%;
+    --secondary-foreground: 300 15% 85%;
 
-    --muted: 15 25% 95%;
-    --muted-foreground: 340 10% 45%;
+    --muted: 220 15% 14%;
+    --muted-foreground: 300 10% 65%;
 
-    /* Accent: warm orange */
-    --accent: 25 85% 65%;
-    --accent-foreground: 0 0% 100%;
+    /* Accent: electric pink */
+    --accent: 320 85% 70%;
+    --accent-foreground: 220 15% 8%;
 
     --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 100%;
+    --destructive-foreground: 300 15% 95%;
 
-    --border: 15 15% 90%;
-    --input: 15 15% 94%;
-    --ring: 340 85% 60%;
+    --border: 220 15% 20%;
+    --input: 220 15% 18%;
+    --ring: 300 85% 65%;
 
-    /* Beautiful gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(340 85% 60%), hsl(25 85% 65%));
-    --gradient-soft: linear-gradient(180deg, hsl(340 85% 95%), hsl(25 85% 95%));
-    --gradient-hero: linear-gradient(135deg, hsl(340 85% 60%) 0%, hsl(25 85% 65%) 50%, hsl(15 85% 70%) 100%);
+    /* Beautiful gradients for Masq */
+    --gradient-primary: linear-gradient(135deg, hsl(300 85% 65%), hsl(320 85% 70%));
+    --gradient-text: linear-gradient(135deg, hsl(300 85% 75%), hsl(320 85% 80%));
+    --gradient-mystery: linear-gradient(135deg, hsl(280 85% 60%) 0%, hsl(300 85% 65%) 50%, hsl(320 85% 70%) 100%);
+    --gradient-card: linear-gradient(135deg, hsl(220 15% 12%), hsl(220 15% 16%));
     
-    /* Romantic glow effects */
-    --glow-primary: 0 10px 40px hsl(340 85% 60% / 0.3);
-    --glow-soft: 0 5px 20px hsl(340 85% 60% / 0.15);
+    /* Mysterious glow effects */
+    --glow-primary: 0 10px 40px hsl(300 85% 65% / 0.4);
+    --glow-mystery: 0 15px 50px hsl(300 85% 65% / 0.3);
+    --glow-soft: 0 5px 20px hsl(300 85% 65% / 0.2);
     
     /* Smooth transitions */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    --transition-mystery: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 
     --radius: 1rem;
 
