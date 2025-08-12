@@ -1,14 +1,14 @@
-import { Heart, MessageCircle, Users, User } from "lucide-react";
+import { Heart, Brain, Calendar, User } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 
 export function BottomNavigation() {
   const location = useLocation();
   
   const navItems = [
-    { icon: Heart, label: "Discover", path: "/discover", gradient: "from-primary to-accent" },
-    { icon: MessageCircle, label: "Messages", path: "/messages", gradient: "from-accent to-primary" },
-    { icon: Users, label: "Matches", path: "/matches", gradient: "from-primary-glow to-accent" },
-    { icon: User, label: "Profile", path: "/profile", gradient: "from-accent to-primary-glow" },
+    { icon: Heart, label: "Swipe", path: "/", gradient: "from-primary to-accent" },
+    { icon: Brain, label: "Tests", path: "/tests", gradient: "from-accent to-primary-glow" },
+    { icon: Calendar, label: "Calendar", path: "/calendar", gradient: "from-primary-glow to-primary" },
+    { icon: User, label: "Profile", path: "/profile", gradient: "from-primary to-accent" }
   ];
 
   const isActive = (path: string) => location.pathname === path;
