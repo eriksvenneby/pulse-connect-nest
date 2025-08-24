@@ -8,6 +8,7 @@ import { AuthProvider, useAuth } from "./hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import Index from "./pages/Index";
 import Tests from "./pages/Tests";
+import TakeTest from "./pages/TakeTest";
 import Calendar from "./pages/Calendar";
 import Messages from "./pages/Messages";
 import Profile from "./pages/Profile";
@@ -86,6 +87,54 @@ const ProfileRequiredRoute = ({ children }: { children: React.ReactNode }) => {
   return <>{children}</>;
 };
 
+const TestRequiredRoute = ({ children }: { children: React.ReactNode }) => {
+  const { user, loading } = useAuth();
+  const [hasCompletedTest, setHasCompletedTest] = useState<boolean | null>(null);
+  const [testLoading, setTestLoading] = useState(true);
+  
+  useEffect(() => {
+    const checkTestCompletion = async () => {
+      if (!user) return;
+      
+      try {
+        const { data, error } = await supabase
+          .from('user_test_responses')
+          .select('id')
+          .eq('user_id', user.id)
+          .limit(1);
+        
+        if (error) throw error;
+        setHasCompletedTest((data?.length || 0) > 0);
+      } catch (error) {
+        console.error('Error checking test completion:', error);
+        setHasCompletedTest(false);
+      } finally {
+        setTestLoading(false);
+      }
+    };
+    
+    checkTestCompletion();
+  }, [user]);
+  
+  if (loading || testLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-lg">Loading...</div>
+      </div>
+    );
+  }
+  
+  if (!user) {
+    return <Navigate to="/auth" replace />;
+  }
+  
+  if (hasCompletedTest === false) {
+    return <Navigate to="/take-test" replace />;
+  }
+  
+  return <>{children}</>;
+};
+
 const AppRoutes = () => {
   const { user, loading } = useAuth();
   
@@ -102,13 +151,15 @@ const AppRoutes = () => {
       <Route path="/auth" element={user ? <Navigate to="/" replace /> : <Auth />} />
       <Route path="/profile-setup" element={<ProtectedRoute><ProfileSetup /></ProtectedRoute>} />
       <Route path="/preferences" element={<ProtectedRoute><Preferences /></ProtectedRoute>} />
-      <Route path="/" element={<ProfileRequiredRoute><Index /></ProfileRequiredRoute>} />
+      <Route path="/take-test" element={<ProfileRequiredRoute><TakeTest /></ProfileRequiredRoute>} />
+      <Route path="/take-test/:testId" element={<ProfileRequiredRoute><TakeTest /></ProfileRequiredRoute>} />
+      <Route path="/" element={<TestRequiredRoute><ProfileRequiredRoute><Index /></ProfileRequiredRoute></TestRequiredRoute>} />
       <Route path="/tests" element={<ProfileRequiredRoute><Tests /></ProfileRequiredRoute>} />
-      <Route path="/calendar" element={<ProfileRequiredRoute><Calendar /></ProfileRequiredRoute>} />
-      <Route path="/messages" element={<ProfileRequiredRoute><Messages /></ProfileRequiredRoute>} />
-      <Route path="/profile" element={<ProfileRequiredRoute><Profile /></ProfileRequiredRoute>} />
-      <Route path="/stats" element={<ProfileRequiredRoute><Stats /></ProfileRequiredRoute>} />
-      <Route path="/achievements" element={<ProfileRequiredRoute><Achievements /></ProfileRequiredRoute>} />
+      <Route path="/calendar" element={<TestRequiredRoute><ProfileRequiredRoute><Calendar /></ProfileRequiredRoute></TestRequiredRoute>} />
+      <Route path="/messages" element={<TestRequiredRoute><ProfileRequiredRoute><Messages /></ProfileRequiredRoute></TestRequiredRoute>} />
+      <Route path="/profile" element={<TestRequiredRoute><ProfileRequiredRoute><Profile /></ProfileRequiredRoute></TestRequiredRoute>} />
+      <Route path="/stats" element={<TestRequiredRoute><ProfileRequiredRoute><Stats /></ProfileRequiredRoute></TestRequiredRoute>} />
+      <Route path="/achievements" element={<TestRequiredRoute><ProfileRequiredRoute><Achievements /></ProfileRequiredRoute></TestRequiredRoute>} />
       {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
       <Route path="*" element={<NotFound />} />
     </Routes>

@@ -14,6 +14,42 @@ export type Database = {
   }
   public: {
     Tables: {
+      personality_tests: {
+        Row: {
+          category: string
+          created_at: string
+          description: string | null
+          id: string
+          is_active: boolean
+          questions: Json
+          scoring_rules: Json
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          questions: Json
+          scoring_rules: Json
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          questions?: Json
+          scoring_rules?: Json
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       photos: {
         Row: {
           created_at: string | null
@@ -136,6 +172,41 @@ export type Database = {
         }
         Relationships: []
       }
+      user_test_responses: {
+        Row: {
+          completed_at: string
+          id: string
+          responses: Json
+          score: Json
+          test_id: string
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string
+          id?: string
+          responses: Json
+          score: Json
+          test_id: string
+          user_id: string
+        }
+        Update: {
+          completed_at?: string
+          id?: string
+          responses?: Json
+          score?: Json
+          test_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_test_responses_test_id_fkey"
+            columns: ["test_id"]
+            isOneToOne: false
+            referencedRelation: "personality_tests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -148,6 +219,10 @@ export type Database = {
       get_current_user_role: {
         Args: Record<PropertyKey, never>
         Returns: Database["public"]["Enums"]["user_role"]
+      }
+      user_has_completed_test: {
+        Args: { user_uuid: string }
+        Returns: boolean
       }
     }
     Enums: {
