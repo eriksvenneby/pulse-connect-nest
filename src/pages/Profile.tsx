@@ -1,11 +1,16 @@
 import LoadingScreen from "@/components/LoadingScreen";
-import { Camera, Edit3, Settings, Heart, MapPin, Briefcase, GraduationCap, Calendar, Clock, Users, Pencil, LogOut } from "lucide-react";
+import { Camera, Edit3, Settings, Heart, MapPin, Briefcase, GraduationCap, Calendar, Clock, Users, Pencil, LogOut, Save } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { HamburgerMenu } from "@/components/navigation/HamburgerMenu";
 import { TokenDisplay } from "@/components/navigation/TokenDisplay";
 import { BottomNavigation } from "@/components/navigation/BottomNavigation";
 import { ProfilePictureSelector } from "@/components/ProfilePictureSelector";
+import { PhotoManager } from "@/components/PhotoManager";
 import { calculateAge, getDisplayAge } from "@/utils/ageCalculator";
 import { handleSignOut } from "@/utils/authCleanup";
 import { useProfilePhoto } from "@/hooks/useProfilePhoto";
@@ -14,16 +19,36 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 export default function Profile() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [profile, setProfile] = useState<any>(null);
   const [photos, setPhotos] = useState<any[]>([]);
+  const [isEditing, setIsEditing] = useState(false);
+  const [saving, setSaving] = useState(false);
   const { photoUrl: profilePhotoUrl, loading: photoLoading } = useProfilePhoto(profile?.profile_picture_id);
   const { selectedColor, setSelectedColor, logoColors } = useLogoCustomization();
+
+  const [formData, setFormData] = useState({
+    bio: '',
+    occupation: '',
+    education: '',
+    location_name: '',
+    interests: [] as string[],
+    dating_preference: '' as 'men' | 'women' | 'both' | '',
+    age_range_min: 18,
+    age_range_max: 99,
+    max_distance: 50,
+    full_name: '',
+  });
   
-  const interests = ["Photography", "Travel", "Art", "Coffee", "Hiking", "Music", "Cooking", "Yoga"];
+  const availableInterests = [
+    "Photography", "Travel", "Art", "Coffee", "Hiking", "Music", 
+    "Cooking", "Yoga", "Reading", "Movies", "Gaming", "Dancing",
+    "Sports", "Technology", "Fashion", "Fitness", "Nature", "Pets"
+  ];
   
   useEffect(() => {
     if (user) {
@@ -43,6 +68,20 @@ export default function Profile() {
       
       if (error) throw error;
       setProfile(data);
+      
+      // Initialize form data
+      setFormData({
+        bio: data.bio || '',
+        occupation: data.occupation || '',
+        education: data.education || '',
+        location_name: data.location_name || '',
+        interests: data.interests || [],
+        dating_preference: data.dating_preference || '',
+        age_range_min: data.age_range_min || 18,
+        age_range_max: data.age_range_max || 99,
+        max_distance: data.max_distance || 50,
+        full_name: data.full_name || '',
+      });
     } catch (error) {
       console.error('Error loading profile:', error);
     }
@@ -66,6 +105,50 @@ export default function Profile() {
 
   const handleProfilePictureChange = (photoId: string) => {
     setProfile(prev => ({ ...prev, profile_picture_id: photoId }));
+  };
+
+  const handleSave = async () => {
+    setSaving(true);
+    try {
+      // Filter out empty values to avoid database constraints
+      const updateData: any = { ...formData };
+      if (updateData.dating_preference === '') {
+        delete updateData.dating_preference;
+      }
+      
+      const { error } = await supabase
+        .from('profiles')
+        .update(updateData)
+        .eq('user_id', user!.id);
+
+      if (error) throw error;
+
+      setProfile(prev => ({ ...prev, ...updateData }));
+      setIsEditing(false);
+      toast.success('Profile updated successfully!');
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      toast.error('Failed to update profile');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleInterestToggle = (interest: string) => {
+    setFormData(prev => ({
+      ...prev,
+      interests: prev.interests.includes(interest)
+        ? prev.interests.filter(i => i !== interest)
+        : [...prev.interests, interest]
+    }));
+  };
+
+  const handlePhotosChange = (newPhotos: any[]) => {
+    setPhotos(newPhotos);
+    // If there's a main photo and no profile picture is set, set it as profile picture
+    if (newPhotos.length > 0 && !profile?.profile_picture_id) {
+      handleProfilePictureChange(newPhotos[0].id);
+    }
   };
 
   if (!profile) {
@@ -157,7 +240,7 @@ export default function Profile() {
           <div className="mt-6">
             <h3 className="font-semibold text-foreground mb-3">Interests</h3>
             <div className="flex flex-wrap gap-2">
-              {(profile.interests || interests).map((interest: string) => (
+              {(profile.interests || availableInterests).map((interest: string) => (
                 <span 
                   key={interest}
                   className="bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-medium"
@@ -233,16 +316,212 @@ export default function Profile() {
           <p className="text-xs text-muted-foreground">This color will be used for your Masq logo</p>
         </Card>
 
+        {/* Edit Mode Toggle */}
+        {isEditing && (
+          <>
+            {/* Photo Management */}
+            <PhotoManager
+              photos={photos}
+              onPhotosChange={handlePhotosChange}
+              maxPhotos={6}
+            />
+
+            {/* Basic Info Editing */}
+            <Card className="p-6 bg-white/80 backdrop-blur-sm border-white/20">
+              <h3 className="font-semibold text-foreground mb-4">Edit Basic Information</h3>
+              
+              <div className="space-y-4">
+                <div>
+                  <Label htmlFor="full_name">Full Name</Label>
+                  <Input
+                    id="full_name"
+                    placeholder="Your full name"
+                    value={formData.full_name}
+                    onChange={(e) => setFormData(prev => ({ ...prev, full_name: e.target.value }))}
+                    className="mt-1"
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="bio">Bio</Label>
+                  <Textarea
+                    id="bio"
+                    placeholder="Tell people what makes you unique..."
+                    value={formData.bio}
+                    onChange={(e) => setFormData(prev => ({ ...prev, bio: e.target.value }))}
+                    className="mt-1"
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="occupation">Occupation</Label>
+                  <Input
+                    id="occupation"
+                    placeholder="Your job title"
+                    value={formData.occupation}
+                    onChange={(e) => setFormData(prev => ({ ...prev, occupation: e.target.value }))}
+                    className="mt-1"
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="education">Education</Label>
+                  <Input
+                    id="education"
+                    placeholder="Your education background"
+                    value={formData.education}
+                    onChange={(e) => setFormData(prev => ({ ...prev, education: e.target.value }))}
+                    className="mt-1"
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="location">Location</Label>
+                  <Input
+                    id="location"
+                    placeholder="Your city or location"
+                    value={formData.location_name}
+                    onChange={(e) => setFormData(prev => ({ ...prev, location_name: e.target.value }))}
+                    className="mt-1"
+                  />
+                </div>
+              </div>
+            </Card>
+
+            {/* Interests Editing */}
+            <Card className="p-6 bg-white/80 backdrop-blur-sm border-white/20">
+              <h3 className="font-semibold text-foreground mb-4">Edit Interests</h3>
+              
+              <div className="flex flex-wrap gap-2">
+                {availableInterests.map((interest) => (
+                  <button
+                    key={interest}
+                    onClick={() => handleInterestToggle(interest)}
+                    className={`px-3 py-1 rounded-full text-xs font-medium transition-all ${
+                      formData.interests.includes(interest)
+                        ? 'bg-primary text-white'
+                        : 'bg-primary/10 text-primary hover:bg-primary/20'
+                    }`}
+                  >
+                    {interest}
+                  </button>
+                ))}
+              </div>
+            </Card>
+
+            {/* Dating Preferences Editing */}
+            <Card className="p-6 bg-white/80 backdrop-blur-sm border-white/20">
+              <h3 className="font-semibold text-foreground mb-4">Edit Dating Preferences</h3>
+              
+              <div className="space-y-4">
+                <div>
+                  <Label htmlFor="dating_preference">Looking For</Label>
+                  <Select 
+                    value={formData.dating_preference} 
+                    onValueChange={(value: 'men' | 'women' | 'both') => setFormData(prev => ({ ...prev, dating_preference: value as any }))}
+                  >
+                    <SelectTrigger className="mt-1">
+                      <SelectValue placeholder="Select preference" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="men">Men</SelectItem>
+                      <SelectItem value="women">Women</SelectItem>
+                      <SelectItem value="both">Both</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="age_min">Min Age</Label>
+                    <Input
+                      id="age_min"
+                      type="number"
+                      min="18"
+                      max="99"
+                      value={formData.age_range_min}
+                      onChange={(e) => setFormData(prev => ({ ...prev, age_range_min: parseInt(e.target.value) }))}
+                      className="mt-1"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="age_max">Max Age</Label>
+                    <Input
+                      id="age_max"
+                      type="number"
+                      min="18"
+                      max="99"
+                      value={formData.age_range_max}
+                      onChange={(e) => setFormData(prev => ({ ...prev, age_range_max: parseInt(e.target.value) }))}
+                      className="mt-1"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <Label htmlFor="max_distance">Maximum Distance (km)</Label>
+                  <Input
+                    id="max_distance"
+                    type="number"
+                    min="1"
+                    max="500"
+                    value={formData.max_distance}
+                    onChange={(e) => setFormData(prev => ({ ...prev, max_distance: parseInt(e.target.value) }))}
+                    className="mt-1"
+                  />
+                </div>
+              </div>
+            </Card>
+          </>
+        )}
+
         <div className="space-y-3">
-          <Button 
-            variant="mystery" 
-            className="w-full" 
-            size="lg"
-            onClick={() => navigate('/edit-profile')}
-          >
-            <Edit3 className="h-5 w-5 mr-2" />
-            Edit Profile
-          </Button>
+          {isEditing ? (
+            <div className="flex gap-3">
+              <Button 
+                variant="mystery" 
+                className="flex-1" 
+                size="lg"
+                onClick={handleSave}
+                disabled={saving}
+              >
+                <Save className="h-5 w-5 mr-2" />
+                {saving ? 'Saving...' : 'Save Changes'}
+              </Button>
+              <Button 
+                variant="outline" 
+                className="flex-1" 
+                size="lg"
+                onClick={() => {
+                  setIsEditing(false);
+                  setFormData({
+                    bio: profile.bio || '',
+                    occupation: profile.occupation || '',
+                    education: profile.education || '',
+                    location_name: profile.location_name || '',
+                    interests: profile.interests || [],
+                    dating_preference: profile.dating_preference || '',
+                    age_range_min: profile.age_range_min || 18,
+                    age_range_max: profile.age_range_max || 99,
+                    max_distance: profile.max_distance || 50,
+                    full_name: profile.full_name || '',
+                  });
+                }}
+              >
+                Cancel
+              </Button>
+            </div>
+          ) : (
+            <Button 
+              variant="mystery" 
+              className="w-full" 
+              size="lg"
+              onClick={() => setIsEditing(true)}
+            >
+              <Edit3 className="h-5 w-5 mr-2" />
+              Edit Profile & Photos
+            </Button>
+          )}
           
           <Button variant="masq" className="w-full" size="lg">
             <Settings className="h-5 w-5 mr-2" />
