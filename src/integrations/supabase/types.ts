@@ -41,6 +41,30 @@ export type Database = {
         }
         Relationships: []
       }
+      matches: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean
+          user1_id: string
+          user2_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          user1_id: string
+          user2_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          user1_id?: string
+          user2_id?: string
+        }
+        Relationships: []
+      }
       personality_tests: {
         Row: {
           category: string
@@ -210,6 +234,30 @@ export type Database = {
           },
         ]
       }
+      swipes: {
+        Row: {
+          created_at: string
+          id: string
+          is_like: boolean
+          target_user_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_like: boolean
+          target_user_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_like?: boolean
+          target_user_id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_test_responses: {
         Row: {
           completed_at: string
@@ -257,6 +305,23 @@ export type Database = {
       get_current_user_role: {
         Args: Record<PropertyKey, never>
         Returns: Database["public"]["Enums"]["user_role"]
+      }
+      get_potential_matches: {
+        Args: { limit_count?: number; requesting_user_id: string }
+        Returns: {
+          age: number
+          bio: string
+          birthday: string
+          distance_km: number
+          education: string
+          full_name: string
+          interests: string[]
+          location_name: string
+          occupation: string
+          personality_match: number
+          profile_picture_id: string
+          user_id: string
+        }[]
       }
       user_has_completed_test: {
         Args: { user_uuid: string }
