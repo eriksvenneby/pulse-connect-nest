@@ -7,16 +7,26 @@ import { BottomNavigation } from "@/components/navigation/BottomNavigation";
 import { calculateAge } from "@/utils/ageCalculator";
 import { useMatching } from "@/hooks/useMatching";
 import { useUserPhotos } from "@/hooks/useUserPhotos";
-import { useState } from "react";
+import { useState, useMemo, useEffect } from "react";
 import LoadingScreen from "@/components/LoadingScreen";
 
 const Index = () => {
   const { currentMatch, hasMoreMatches, loading, isSwipeProcessing, handleSwipe, handleUndo } = useMatching();
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
   
+  // Memoize photos array to prevent infinite re-renders
+  const matchPhotos = useMemo(() => {
+    return currentMatch?.photos || [];
+  }, [currentMatch?.photos]);
+  
   // Get all photos for the current match
-  const { photoUrls, loading: photosLoading } = useUserPhotos(currentMatch?.photos || []);
+  const { photoUrls, loading: photosLoading } = useUserPhotos(matchPhotos);
   const photos = photoUrls.length > 0 ? photoUrls : [];
+  
+  // Reset photo index when match changes
+  useEffect(() => {
+    setCurrentPhotoIndex(0);
+  }, [currentMatch?.user_id]);
   
   const totalPhotos = photos.length;
 
