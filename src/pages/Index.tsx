@@ -160,26 +160,6 @@ const Index = () => {
                 ))}
               </div>
 
-              {/* Heart and X buttons */}
-              <div className="absolute bottom-4 left-4">
-                <Button 
-                  size="icon" 
-                  className="h-14 w-14 rounded-full bg-white/90 hover:bg-white shadow-lg"
-                  onClick={() => handleSwipe('left')}
-                >
-                  <X className="h-8 w-8 text-red-500" />
-                </Button>
-              </div>
-              <div className="absolute bottom-4 right-4">
-                <Button 
-                  size="icon" 
-                  className="h-14 w-14 rounded-full bg-white/90 hover:bg-white shadow-lg"
-                  onClick={() => handleSwipe('right')}
-                >
-                  <Heart className="h-7 w-7 text-green-500 fill-green-500" />
-                </Button>
-              </div>
-
               {/* Online Status */}
               <div className="absolute top-4 right-4 bg-white/20 backdrop-blur-sm rounded-full px-3 py-1">
                 <span className="text-white text-sm font-medium">
@@ -188,20 +168,38 @@ const Index = () => {
               </div>
               
               {/* Basic Info Overlay */}
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4">
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4 pb-2">
                 <h2 className="text-white text-2xl font-bold mb-1">{currentPerson.name}, {currentPerson.age}</h2>
-                <div className="flex items-center gap-4 text-white/90 text-sm">
+                <div className="flex items-center gap-4 text-white/90 text-sm mb-4">
                   <span>{currentPerson.distance}</span>
                   <span>•</span>
                   <span>{currentPerson.height}</span>
                   <span>•</span>
                   <span>{currentPerson.zodiac}</span>
                 </div>
+                
+                {/* Heart and X buttons */}
+                <div className="flex justify-between items-center">
+                  <Button 
+                    size="icon" 
+                    className="h-16 w-16 rounded-full bg-white/90 hover:bg-white shadow-lg"
+                    onClick={() => handleSwipe('left')}
+                  >
+                    <X className="h-9 w-9 text-red-500" />
+                  </Button>
+                  <Button 
+                    size="icon" 
+                    className="h-14 w-14 rounded-full bg-white/90 hover:bg-white shadow-lg"
+                    onClick={() => handleSwipe('right')}
+                  >
+                    <Heart className="h-7 w-7 text-green-500 fill-green-500" />
+                  </Button>
+                </div>
               </div>
             </div>
 
             {/* Profile Details */}
-            <div className="p-4 h-[30%] overflow-y-auto">
+            <div className="p-4 h-[30%] overflow-y-auto pt-6">
               {/* Job & Education */}
               <div className="mb-3">
                 <div className="text-sm font-medium text-foreground">{currentPerson.job}</div>

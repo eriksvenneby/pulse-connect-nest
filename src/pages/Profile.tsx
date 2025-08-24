@@ -1,6 +1,7 @@
 import { Camera, Edit3, Settings, Heart, MapPin, Briefcase, GraduationCap, Calendar, Clock, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { BottomNavigation } from "@/components/navigation/BottomNavigation";
 
 export default function Profile() {
   const interests = ["Photography", "Travel", "Art", "Coffee", "Hiking", "Music", "Cooking", "Yoga"];
@@ -139,10 +140,12 @@ export default function Profile() {
             Upgrade to Premium for unlimited likes
           </p>
           <Button variant="masq" size="sm">
-            Upgrade Now
-          </Button>
-        </Card>
-      </div>
+          Upgrade Now
+        </Button>
+      </Card>
     </div>
-  );
+
+    <BottomNavigation />
+  </div>
+);
 }
