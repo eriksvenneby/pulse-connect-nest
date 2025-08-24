@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { MasqueradeIcon } from "@/components/icons/MasqueradeIcon";
+import CustomizableLogo from "@/components/CustomizableLogo";
 import { Plus, CreditCard, Sparkles } from "lucide-react";
 
 export const TokenDisplay = () => {
@@ -40,7 +40,7 @@ export const TokenDisplay = () => {
           size="sm" 
           className="rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/30 transition-all duration-300 shadow-glow-soft flex items-center gap-2 px-3"
         >
-          <MasqueradeIcon className="h-4 w-4 text-purple-400" />
+          <CustomizableLogo size="sm" />
           <span className="text-white font-medium text-sm">{tokens}</span>
           <Plus className="h-3 w-3 text-white/80" />
         </Button>
@@ -49,7 +49,7 @@ export const TokenDisplay = () => {
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <MasqueradeIcon className="h-5 w-5 text-purple-500" />
+            <CustomizableLogo size="sm" />
             Buy Masq Tokens
           </DialogTitle>
           <DialogDescription>
@@ -60,7 +60,7 @@ export const TokenDisplay = () => {
         <div className="space-y-4">
           <div className="bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-lg p-4 border border-purple-500/20">
             <div className="flex items-center justify-center gap-2 mb-2">
-              <MasqueradeIcon className="h-6 w-6 text-purple-500" />
+              <CustomizableLogo size="md" />
               <span className="font-semibold text-lg">{tokens} Tokens</span>
             </div>
             <p className="text-sm text-muted-foreground text-center">Current Balance</p>
@@ -87,7 +87,7 @@ export const TokenDisplay = () => {
                         )}
                       </div>
                       <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                        <MasqueradeIcon className="h-3 w-3 text-purple-400" />
+                        <CustomizableLogo size="sm" />
                         <span>{pkg.tokens} tokens</span>
                         {pkg.bonus && (
                           <span className="text-green-500 font-medium">

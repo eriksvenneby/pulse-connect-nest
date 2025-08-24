@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { Menu, X, Settings, Heart, Bell, HelpCircle, BarChart3, Trophy, Phone } from "lucide-react";
+import { Menu, X, Settings, Heart, Bell, HelpCircle, BarChart3, Trophy, Phone, Palette } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { MasqueradeIcon } from "@/components/icons/MasqueradeIcon";
+import CustomizableLogo from "@/components/CustomizableLogo";
 
 export function HamburgerMenu() {
   const [isOpen, setIsOpen] = useState(false);
@@ -11,6 +11,7 @@ export function HamburgerMenu() {
     { icon: Phone, label: "Live Calls (beta)", href: "/calls" },
     { icon: BarChart3, label: "Stats", href: "/stats" },
     { icon: Trophy, label: "Achievements", href: "/achievements" },
+    { icon: Palette, label: "Logo Customization", href: "/logo-customization" },
     { icon: Settings, label: "Settings", href: "/settings" },
     { icon: Heart, label: "Preferences", href: "/preferences" },
     { icon: Bell, label: "Notifications", href: "/notifications" },
@@ -34,8 +35,8 @@ export function HamburgerMenu() {
       >
         <SheetHeader className="border-b border-white/20 pb-6">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-gradient-primary rounded-full flex items-center justify-center p-2">
-              <img src="/lovable-uploads/eb3b3039-81e6-4411-98cd-08c4bb81eddd.png" alt="Masq Logo" className="w-full h-full object-contain" />
+            <div className="w-16 h-16 bg-black rounded-full flex items-center justify-center p-2">
+              <CustomizableLogo size="lg" />
             </div>
             <div>
               <SheetTitle className="text-lg font-semibold text-foreground">

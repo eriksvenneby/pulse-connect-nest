@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./hooks/useAuth";
+import { LogoCustomizationProvider } from "./hooks/useLogoCustomization";
 import { supabase } from "@/integrations/supabase/client";
 import LoadingScreen from "@/components/LoadingScreen";
 import Index from "./pages/Index";
@@ -19,6 +20,7 @@ import Auth from "./pages/Auth";
 import ProfileSetup from "./pages/ProfileSetup";
 import Preferences from "./pages/Preferences";
 import Calls from "./pages/Calls";
+import LogoCustomization from "./pages/LogoCustomization";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -147,6 +149,7 @@ const AppRoutes = () => {
       <Route path="/stats" element={<TestRequiredRoute><ProfileRequiredRoute><Stats /></ProfileRequiredRoute></TestRequiredRoute>} />
       <Route path="/achievements" element={<TestRequiredRoute><ProfileRequiredRoute><Achievements /></ProfileRequiredRoute></TestRequiredRoute>} />
       <Route path="/calls" element={<TestRequiredRoute><ProfileRequiredRoute><Calls /></ProfileRequiredRoute></TestRequiredRoute>} />
+      <Route path="/logo-customization" element={<ProtectedRoute><LogoCustomization /></ProtectedRoute>} />
       {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
       <Route path="*" element={<NotFound />} />
     </Routes>
@@ -155,15 +158,17 @@ const AppRoutes = () => {
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <AuthProvider>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <AppRoutes />
-        </BrowserRouter>
-      </TooltipProvider>
-    </AuthProvider>
+    <LogoCustomizationProvider>
+      <AuthProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <AppRoutes />
+          </BrowserRouter>
+        </TooltipProvider>
+      </AuthProvider>
+    </LogoCustomizationProvider>
   </QueryClientProvider>
 );
 

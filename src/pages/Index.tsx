@@ -182,17 +182,21 @@ const Index = () => {
                 <div className="flex justify-between items-center">
                   <Button 
                     size="icon" 
-                    className="h-16 w-16 rounded-full bg-white/90 hover:bg-white shadow-lg"
+                    className="h-14 w-14 rounded-full bg-white/90 hover:bg-white shadow-lg relative"
                     onClick={() => handleSwipe('left')}
                   >
-                    <X className="h-12 w-12 text-red-500" />
+                    <div className="h-10 w-10 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full flex items-center justify-center">
+                      <X className="h-8 w-8 text-white" />
+                    </div>
                   </Button>
                   <Button 
                     size="icon" 
-                    className="h-14 w-14 rounded-full bg-white/90 hover:bg-white shadow-lg"
+                    className="h-14 w-14 rounded-full bg-white/90 hover:bg-white shadow-lg relative"
                     onClick={() => handleSwipe('right')}
                   >
-                    <Heart className="h-7 w-7 text-green-500 fill-green-500" />
+                    <div className="h-10 w-10 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full flex items-center justify-center">
+                      <Heart className="h-8 w-8 text-white fill-white" />
+                    </div>
                   </Button>
                 </div>
               </div>

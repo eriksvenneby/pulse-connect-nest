@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { MasqueradeIcon } from "@/components/icons/MasqueradeIcon";
+import CustomizableLogo from "@/components/CustomizableLogo";
 
 interface LoadingQuote {
   id: string;
@@ -47,7 +47,7 @@ const LoadingScreen = ({ message = "Loading..." }: LoadingScreenProps) => {
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-soft p-6">
       {/* Logo */}
       <div className="mb-8 animate-pulse">
-        <MasqueradeIcon className="w-24 h-24 mx-auto" />
+        <CustomizableLogo size="lg" className="mx-auto" />
       </div>
 
       {/* App Name */}
