@@ -21,6 +21,7 @@ import ProfileSetup from "./pages/ProfileSetup";
 import Preferences from "./pages/Preferences";
 import Calls from "./pages/Calls";
 import LogoCustomization from "./pages/LogoCustomization";
+import EditProfile from "./pages/EditProfile";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -150,6 +151,7 @@ const AppRoutes = () => {
       <Route path="/achievements" element={<TestRequiredRoute><ProfileRequiredRoute><Achievements /></ProfileRequiredRoute></TestRequiredRoute>} />
       <Route path="/calls" element={<TestRequiredRoute><ProfileRequiredRoute><Calls /></ProfileRequiredRoute></TestRequiredRoute>} />
       <Route path="/logo-customization" element={<ProtectedRoute><LogoCustomization /></ProtectedRoute>} />
+      <Route path="/edit-profile" element={<TestRequiredRoute><ProfileRequiredRoute><EditProfile /></ProfileRequiredRoute></TestRequiredRoute>} />
       {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
       <Route path="*" element={<NotFound />} />
     </Routes>
