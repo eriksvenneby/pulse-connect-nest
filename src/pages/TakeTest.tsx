@@ -1,3 +1,4 @@
+import LoadingScreen from "@/components/LoadingScreen";
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -168,11 +169,7 @@ const TakeTest = () => {
   };
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-lg">Loading test...</div>
-      </div>
-    );
+    return <LoadingScreen message="Loading test..." />;
   }
 
   if (!test) {

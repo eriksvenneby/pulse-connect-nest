@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
+import LoadingScreen from "@/components/LoadingScreen";
 import Index from "./pages/Index";
 import Tests from "./pages/Tests";
 import TakeTest from "./pages/TakeTest";
@@ -25,11 +26,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { user, loading } = useAuth();
   
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-lg">Loading...</div>
-      </div>
-    );
+    return <LoadingScreen message="Authenticating..." />;
   }
   
   if (!user) {
@@ -69,11 +66,7 @@ const ProfileRequiredRoute = ({ children }: { children: React.ReactNode }) => {
   }, [user]);
   
   if (loading || profileLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-lg">Loading...</div>
-      </div>
-    );
+    return <LoadingScreen message="Loading your profile..." />;
   }
   
   if (!user) {
@@ -117,11 +110,7 @@ const TestRequiredRoute = ({ children }: { children: React.ReactNode }) => {
   }, [user]);
   
   if (loading || testLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-lg">Loading...</div>
-      </div>
-    );
+    return <LoadingScreen message="Checking test requirements..." />;
   }
   
   if (!user) {
@@ -139,11 +128,7 @@ const AppRoutes = () => {
   const { user, loading } = useAuth();
   
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-lg">Loading...</div>
-      </div>
-    );
+    return <LoadingScreen message="Setting up your experience..." />;
   }
 
   return (

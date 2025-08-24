@@ -14,6 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
+      loading_quotes: {
+        Row: {
+          author: string
+          created_at: string
+          id: string
+          is_active: boolean
+          quote: string
+          updated_at: string
+        }
+        Insert: {
+          author: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          quote: string
+          updated_at?: string
+        }
+        Update: {
+          author?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          quote?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       personality_tests: {
         Row: {
           category: string

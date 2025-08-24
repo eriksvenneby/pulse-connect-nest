@@ -38,7 +38,7 @@ export default function Calendar() {
         <HamburgerMenu />
         
         <div className="text-center">
-          <h1 className="bg-gradient-text bg-clip-text text-transparent text-xl font-bold">Calendar</h1>
+          <h1 className="bg-gradient-text bg-clip-text text-transparent text-xl font-bold">Masq Calendar</h1>
           <div className="text-muted-foreground text-sm">Schedule 6-minute dates</div>
         </div>
 

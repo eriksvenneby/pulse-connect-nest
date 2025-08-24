@@ -1,3 +1,4 @@
+import LoadingScreen from "@/components/LoadingScreen";
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from "@/integrations/supabase/client";
@@ -66,11 +67,7 @@ export default function Tests() {
   };
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-lg">Loading tests...</div>
-      </div>
-    );
+    return <LoadingScreen message="Loading tests..." />;
   }
 
   const completedTests = userResponses.length;
@@ -83,7 +80,7 @@ export default function Tests() {
         <HamburgerMenu />
         
         <div className="text-center">
-          <h1 className="bg-gradient-text bg-clip-text text-transparent text-xl font-bold">Personality Tests</h1>
+          <h1 className="bg-gradient-text bg-clip-text text-transparent text-xl font-bold">Masq Tests</h1>
           <div className="text-muted-foreground text-sm">Discover your authentic self</div>
         </div>
 

@@ -1,3 +1,4 @@
+import LoadingScreen from "@/components/LoadingScreen";
 import { Camera, Edit3, Settings, Heart, MapPin, Briefcase, GraduationCap, Calendar, Clock, Users, Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -83,13 +84,7 @@ export default function Profile() {
   };
 
   if (!profile) {
-    return (
-      <div className="min-h-screen bg-gradient-soft pb-20 pt-0">
-        <div className="flex items-center justify-center h-full">
-          <div className="text-lg">Loading...</div>
-        </div>
-      </div>
-    );
+    return <LoadingScreen message="Loading your profile..." />;
   }
 
   const userAge = profile.birthday ? getDisplayAge(profile.birthday) : '?';
@@ -101,7 +96,7 @@ export default function Profile() {
         <HamburgerMenu />
         
         <div className="text-center">
-          <h1 className="bg-gradient-text bg-clip-text text-transparent text-xl font-bold">Profile</h1>
+          <h1 className="bg-gradient-text bg-clip-text text-transparent text-xl font-bold">Masq Profile</h1>
           <div className="text-muted-foreground text-sm">Make a great first impression</div>
         </div>
 
