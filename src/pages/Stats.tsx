@@ -1,5 +1,7 @@
 import { BarChart3, Clock, MessageCircle, Heart, Users, Trophy, Target, Timer } from "lucide-react";
 import { Card } from "@/components/ui/card";
+import { HamburgerMenu } from "@/components/navigation/HamburgerMenu";
+import { TokenDisplay } from "@/components/navigation/TokenDisplay";
 import { BottomNavigation } from "@/components/navigation/BottomNavigation";
 
 export default function Stats() {
@@ -33,12 +35,20 @@ export default function Stats() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-soft pb-20 pt-6">
-      <div className="container max-w-md mx-auto px-4">
-        <div className="text-center mb-6">
-          <h1 className="text-2xl font-bold text-foreground mb-2">Your Stats</h1>
-          <p className="text-muted-foreground">Track your dating journey progress</p>
+    <div className="min-h-screen bg-gradient-soft pb-20 pt-0">
+      {/* Header */}
+      <div className="flex items-center justify-between p-4 pt-12 bg-gradient-card">
+        <HamburgerMenu />
+        
+        <div className="text-center">
+          <h1 className="bg-gradient-text bg-clip-text text-transparent text-xl font-bold">Your Stats</h1>
+          <div className="text-muted-foreground text-sm">Track your dating journey progress</div>
         </div>
+
+        <TokenDisplay />
+      </div>
+
+      <div className="container max-w-md mx-auto px-4 pt-6">
 
         {/* Stats Grid */}
         <div className="grid grid-cols-2 gap-3 mb-6">

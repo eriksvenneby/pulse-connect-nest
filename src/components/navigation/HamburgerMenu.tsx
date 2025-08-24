@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Menu, X, Settings, Heart, Bell, HelpCircle, BarChart3, Trophy } from "lucide-react";
+import { Menu, X, Settings, Heart, Bell, HelpCircle, BarChart3, Trophy, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 
@@ -7,6 +7,7 @@ export function HamburgerMenu() {
   const [isOpen, setIsOpen] = useState(false);
 
   const menuItems = [
+    { icon: Phone, label: "Live Calls with Matches", href: "/calls" },
     { icon: BarChart3, label: "Stats", href: "/stats" },
     { icon: Trophy, label: "Achievements", href: "/achievements" },
     { icon: Settings, label: "Settings", href: "/settings" },

@@ -1,18 +1,28 @@
 import { Camera, Edit3, Settings, Heart, MapPin, Briefcase, GraduationCap, Calendar, Clock, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { HamburgerMenu } from "@/components/navigation/HamburgerMenu";
+import { TokenDisplay } from "@/components/navigation/TokenDisplay";
 import { BottomNavigation } from "@/components/navigation/BottomNavigation";
 
 export default function Profile() {
   const interests = ["Photography", "Travel", "Art", "Coffee", "Hiking", "Music", "Cooking", "Yoga"];
   
   return (
-    <div className="min-h-screen bg-gradient-soft pb-20 pt-6">
-      <div className="container max-w-md mx-auto px-4">
-        <div className="text-center mb-6">
-          <h1 className="text-2xl font-bold text-foreground mb-2">Profile</h1>
-          <p className="text-muted-foreground">Make a great first impression</p>
+    <div className="min-h-screen bg-gradient-soft pb-20 pt-0">
+      {/* Header */}
+      <div className="flex items-center justify-between p-4 pt-12 bg-gradient-card">
+        <HamburgerMenu />
+        
+        <div className="text-center">
+          <h1 className="bg-gradient-text bg-clip-text text-transparent text-xl font-bold">Profile</h1>
+          <div className="text-muted-foreground text-sm">Make a great first impression</div>
         </div>
+
+        <TokenDisplay />
+      </div>
+
+      <div className="container max-w-md mx-auto px-4 pt-6">
 
         <Card className="p-6 mb-6 bg-white/80 backdrop-blur-sm border-white/20">
           <div className="text-center mb-6">
@@ -140,12 +150,12 @@ export default function Profile() {
             Upgrade to Premium for unlimited likes
           </p>
           <Button variant="masq" size="sm">
-          Upgrade Now
-        </Button>
-      </Card>
-    </div>
+            Upgrade Now
+          </Button>
+        </Card>
+      </div>
 
-    <BottomNavigation />
-  </div>
-);
+      <BottomNavigation />
+    </div>
+  );
 }

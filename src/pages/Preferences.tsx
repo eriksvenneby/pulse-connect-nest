@@ -7,6 +7,8 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Slider } from "@/components/ui/slider";
 import { Badge } from "@/components/ui/badge";
 import { BottomNavigation } from "@/components/navigation/BottomNavigation";
+import { HamburgerMenu } from "@/components/navigation/HamburgerMenu";
+import { TokenDisplay } from "@/components/navigation/TokenDisplay";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@/hooks/useAuth";
@@ -156,12 +158,20 @@ const Preferences = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background to-muted pb-20 pt-6">
-      <div className="container max-w-md mx-auto px-4">
-        <div className="text-center mb-6">
-          <h1 className="text-2xl font-bold text-foreground mb-2">Preferences</h1>
-          <p className="text-muted-foreground">Customize your dating experience</p>
+    <div className="min-h-screen bg-gradient-to-br from-background to-muted pb-20 pt-0">
+      {/* Header */}
+      <div className="flex items-center justify-between p-4 pt-12 bg-gradient-card">
+        <HamburgerMenu />
+        
+        <div className="text-center">
+          <h1 className="bg-gradient-text bg-clip-text text-transparent text-xl font-bold">Preferences</h1>
+          <div className="text-muted-foreground text-sm">Customize your dating experience</div>
         </div>
+
+        <TokenDisplay />
+      </div>
+
+      <div className="container max-w-md mx-auto px-4 pt-6">
 
         <div className="space-y-6">
           {/* Dating Preferences */}

@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { BottomNavigation } from "@/components/navigation/BottomNavigation";
 import { HamburgerMenu } from "@/components/navigation/HamburgerMenu";
+import { TokenDisplay } from "@/components/navigation/TokenDisplay";
 import { Progress } from "@/components/ui/progress";
 
 export default function Tests() {
@@ -88,9 +89,7 @@ export default function Tests() {
           <div className="text-muted-foreground text-sm">Discover your authentic self</div>
         </div>
 
-        <Button size="icon" variant="ghost" className="text-foreground hover:bg-secondary">
-          <Brain className="h-5 w-5" />
-        </Button>
+        <TokenDisplay />
       </div>
 
       <div className="px-6 py-6 space-y-6">

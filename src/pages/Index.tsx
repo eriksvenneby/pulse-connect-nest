@@ -1,7 +1,8 @@
-import { Heart, X, Star, Shield, Eye, EyeOff, RotateCcw, MessageCircle } from "lucide-react";
+import { Heart, X, Star, Shield, Eye, EyeOff, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { HamburgerMenu } from "@/components/navigation/HamburgerMenu";
+import { TokenDisplay } from "@/components/navigation/TokenDisplay";
 import { BottomNavigation } from "@/components/navigation/BottomNavigation";
 import { useState } from "react";
 
@@ -120,9 +121,7 @@ const Index = () => {
           </div>
         </div>
 
-        <Button size="icon" variant="ghost" className="text-foreground hover:bg-secondary">
-          <RotateCcw className="h-5 w-5" onClick={handleUndo} />
-        </Button>
+        <TokenDisplay />
       </div>
 
       <div className="container max-w-md mx-auto px-4">
@@ -185,7 +184,7 @@ const Index = () => {
                     className="h-16 w-16 rounded-full bg-white/90 hover:bg-white shadow-lg"
                     onClick={() => handleSwipe('left')}
                   >
-                    <X className="h-9 w-9 text-red-500" />
+                    <X className="h-12 w-12 text-red-500" />
                   </Button>
                   <Button 
                     size="icon" 
@@ -255,22 +254,13 @@ const Index = () => {
         </div>
 
         {/* Action Buttons */}
-        <div className="flex justify-center items-center gap-4">
+        <div className="flex justify-center items-center">
           <Button 
             size="icon" 
             variant="outline" 
             className="h-12 w-12 rounded-full border-accent/30 hover:bg-accent hover:text-white transition-all duration-300"
           >
             <Star className="h-5 w-5" />
-          </Button>
-
-          <Button 
-            variant="mystery" 
-            className="px-6 py-3 rounded-full flex items-center gap-2 animate-pulse-glow"
-            onClick={() => {/* TODO: Implement chat now functionality */}}
-          >
-            <MessageCircle className="h-5 w-5" />
-            Chat Now
           </Button>
         </div>
       </div>

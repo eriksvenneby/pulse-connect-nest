@@ -1,6 +1,8 @@
 import { Search, MessageCircle, Clock } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
+import { HamburgerMenu } from "@/components/navigation/HamburgerMenu";
+import { TokenDisplay } from "@/components/navigation/TokenDisplay";
 import { BottomNavigation } from "@/components/navigation/BottomNavigation";
 
 export default function Messages() {
@@ -32,13 +34,20 @@ export default function Messages() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-soft pb-20 pt-6">
-      <div className="container max-w-md mx-auto px-4">
-        <div className="text-center mb-6">
-          <h1 className="text-2xl font-bold text-foreground mb-2">Messages</h1>
-          <p className="text-muted-foreground">Connect with your matches</p>
+    <div className="min-h-screen bg-gradient-soft pb-20 pt-0">
+      {/* Header */}
+      <div className="flex items-center justify-between p-4 pt-12 bg-gradient-card">
+        <HamburgerMenu />
+        
+        <div className="text-center">
+          <h1 className="bg-gradient-text bg-clip-text text-transparent text-xl font-bold">Messages</h1>
+          <div className="text-muted-foreground text-sm">Connect with your matches</div>
         </div>
 
+        <TokenDisplay />
+      </div>
+
+      <div className="container max-w-md mx-auto px-4 pt-6">
         <div className="relative mb-6">
           <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
           <Input 
