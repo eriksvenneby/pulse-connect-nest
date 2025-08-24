@@ -116,6 +116,7 @@ export type Database = {
           max_distance: number | null
           occupation: string | null
           profile_complete: boolean | null
+          profile_picture_id: string | null
           role: Database["public"]["Enums"]["user_role"]
           updated_at: string
           user_id: string
@@ -141,6 +142,7 @@ export type Database = {
           max_distance?: number | null
           occupation?: string | null
           profile_complete?: boolean | null
+          profile_picture_id?: string | null
           role?: Database["public"]["Enums"]["user_role"]
           updated_at?: string
           user_id: string
@@ -166,11 +168,20 @@ export type Database = {
           max_distance?: number | null
           occupation?: string | null
           profile_complete?: boolean | null
+          profile_picture_id?: string | null
           role?: Database["public"]["Enums"]["user_role"]
           updated_at?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "profiles_profile_picture_id_fkey"
+            columns: ["profile_picture_id"]
+            isOneToOne: false
+            referencedRelation: "photos"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_test_responses: {
         Row: {
