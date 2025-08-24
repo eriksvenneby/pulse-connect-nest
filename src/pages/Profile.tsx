@@ -1,9 +1,10 @@
-import { Camera, Edit3, Settings, Heart, MapPin, Briefcase, GraduationCap, Calendar, Clock, Users } from "lucide-react";
+import { Camera, Edit3, Settings, Heart, MapPin, Briefcase, GraduationCap, Calendar, Clock, Users, Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { HamburgerMenu } from "@/components/navigation/HamburgerMenu";
 import { TokenDisplay } from "@/components/navigation/TokenDisplay";
 import { BottomNavigation } from "@/components/navigation/BottomNavigation";
+import { ProfilePictureSelector } from "@/components/ProfilePictureSelector";
 import { calculateAge, getDisplayAge } from "@/utils/ageCalculator";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -13,6 +14,7 @@ export default function Profile() {
   const { user } = useAuth();
   const [profile, setProfile] = useState<any>(null);
   const [photos, setPhotos] = useState<any[]>([]);
+  const [profilePhoto, setProfilePhoto] = useState<any>(null);
   
   const interests = ["Photography", "Travel", "Art", "Coffee", "Hiking", "Music", "Cooking", "Yoga"];
   
@@ -22,6 +24,12 @@ export default function Profile() {
       loadPhotos();
     }
   }, [user]);
+
+  useEffect(() => {
+    if (profile?.profile_picture_id) {
+      loadProfilePhoto();
+    }
+  }, [profile?.profile_picture_id]);
 
   const loadProfile = async () => {
     try {
@@ -51,6 +59,27 @@ export default function Profile() {
     } catch (error) {
       console.error('Error loading photos:', error);
     }
+  };
+
+  const loadProfilePhoto = async () => {
+    if (!profile?.profile_picture_id) return;
+    
+    try {
+      const { data, error } = await supabase
+        .from('photos')
+        .select('*')
+        .eq('id', profile.profile_picture_id)
+        .single();
+      
+      if (error) throw error;
+      setProfilePhoto(data);
+    } catch (error) {
+      console.error('Error loading profile photo:', error);
+    }
+  };
+
+  const handleProfilePictureChange = (photoId: string) => {
+    setProfile(prev => ({ ...prev, profile_picture_id: photoId }));
   };
 
   if (!profile) {
@@ -84,16 +113,31 @@ export default function Profile() {
         <Card className="p-6 mb-6 bg-white/80 backdrop-blur-sm border-white/20">
           <div className="text-center mb-6">
             <div className="relative inline-block">
-              <div className="w-32 h-32 bg-gradient-primary rounded-full flex items-center justify-center mx-auto mb-4 shadow-glow">
-                <span className="text-white font-bold text-4xl">A</span>
+              <div className="w-32 h-32 bg-gradient-primary rounded-full flex items-center justify-center mx-auto mb-4 shadow-glow overflow-hidden">
+                {profilePhoto ? (
+                  <div className="w-full h-full bg-gradient-primary flex items-center justify-center text-white font-bold text-4xl">
+                    {/* Placeholder - replace with actual photo when storage is set up */}
+                    {profile.full_name?.charAt(0) || 'A'}
+                  </div>
+                ) : (
+                  <span className="text-white font-bold text-4xl">
+                    {profile.full_name?.charAt(0) || 'A'}
+                  </span>
+                )}
               </div>
-              <Button 
-                size="icon" 
-                variant="mystery" 
-                className="absolute bottom-2 right-2 h-10 w-10 rounded-full shadow-glow"
+              <ProfilePictureSelector
+                photos={photos}
+                currentProfilePictureId={profile?.profile_picture_id}
+                onProfilePictureChange={handleProfilePictureChange}
               >
-                <Camera className="h-5 w-5" />
-              </Button>
+                <Button 
+                  size="icon" 
+                  variant="mystery" 
+                  className="absolute bottom-2 right-2 h-8 w-8 rounded-full shadow-glow"
+                >
+                  <Pencil className="h-4 w-4" />
+                </Button>
+              </ProfilePictureSelector>
             </div>
             <h2 className="text-2xl font-bold text-foreground mb-1">{profile.full_name || 'Your Name'}, {userAge}</h2>
             <div className="flex items-center justify-center gap-2 text-muted-foreground text-sm">
