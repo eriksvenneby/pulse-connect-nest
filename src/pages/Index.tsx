@@ -6,7 +6,7 @@ import { TokenDisplay } from "@/components/navigation/TokenDisplay";
 import { BottomNavigation } from "@/components/navigation/BottomNavigation";
 import { calculateAge } from "@/utils/ageCalculator";
 import { useMatching } from "@/hooks/useMatching";
-import { useProfilePhoto } from "@/hooks/useProfilePhoto";
+import { useUserPhotos } from "@/hooks/useUserPhotos";
 import { useState } from "react";
 import LoadingScreen from "@/components/LoadingScreen";
 
@@ -14,9 +14,9 @@ const Index = () => {
   const { currentMatch, hasMoreMatches, loading, isSwipeProcessing, handleSwipe, handleUndo } = useMatching();
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
   
-  // For demo purposes, create a photos array from profile picture
-  const { photoUrl } = useProfilePhoto(currentMatch?.profile_picture_id || null);
-  const photos = photoUrl ? [photoUrl] : ["https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=600&fit=crop&crop=face"];
+  // Get all photos for the current match
+  const { photoUrls, loading: photosLoading } = useUserPhotos(currentMatch?.photos || []);
+  const photos = photoUrls.length > 0 ? photoUrls : [];
   
   const totalPhotos = photos.length;
 
@@ -96,34 +96,46 @@ const Index = () => {
           <Card className="w-full h-full bg-gradient-card rounded-3xl shadow-glow-mystery overflow-hidden border-primary/20">
             {/* Photo Section */}
             <div className="h-[70%] relative overflow-hidden">
-              <img 
-                src={photos[currentPhotoIndex]} 
-                alt={`${currentMatch.full_name || 'User'} photo ${currentPhotoIndex + 1}`}
-                className="w-full h-full object-cover"
-              />
+              {photos.length > 0 ? (
+                <img 
+                  src={photos[currentPhotoIndex]} 
+                  alt={`${currentMatch.full_name || 'User'} photo ${currentPhotoIndex + 1}`}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full bg-gradient-card flex items-center justify-center">
+                  <p className="text-muted-foreground">No photos available</p>
+                </div>
+              )}
               
-              {/* Photo Navigation Overlay */}
-              <div className="absolute inset-0 flex">
-                {photos.map((_, index) => (
-                  <div 
-                    key={index}
-                    className="flex-1 cursor-pointer"
-                    onClick={index < currentPhotoIndex ? prevPhoto : nextPhoto}
-                  />
-                ))}
-              </div>
-              
-              {/* Photo Indicators */}
-              <div className="absolute top-3 left-3 right-3 flex gap-1">
-                {photos.map((_, index) => (
-                  <div 
-                    key={index}
-                    className={`flex-1 h-1 rounded-full transition-colors ${
-                      index === currentPhotoIndex ? 'bg-white' : 'bg-white/30'
-                    }`}
-                  />
-                ))}
-              </div>
+              {/* Photo Navigation Overlay - only show if there are photos */}
+              {photos.length > 0 && (
+                <>
+                  <div className="absolute inset-0 flex">
+                    {photos.map((_, index) => (
+                      <div 
+                        key={index}
+                        className="flex-1 cursor-pointer"
+                        onClick={index < currentPhotoIndex ? prevPhoto : nextPhoto}
+                      />
+                    ))}
+                  </div>
+                  
+                  {/* Photo Indicators - only show if more than 1 photo */}
+                  {photos.length > 1 && (
+                    <div className="absolute top-3 left-3 right-3 flex gap-1">
+                      {photos.map((_, index) => (
+                        <div 
+                          key={index}
+                          className={`flex-1 h-1 rounded-full transition-colors ${
+                            index === currentPhotoIndex ? 'bg-white' : 'bg-white/30'
+                          }`}
+                        />
+                      ))}
+                    </div>
+                  )}
+                </>
+              )}
 
               {/* Distance/Location */}
               {(currentMatch.distance_km || currentMatch.location_name) && (

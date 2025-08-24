@@ -16,6 +16,11 @@ export interface PotentialMatch {
   education: string | null;
   interests: string[] | null;
   location_name: string | null;
+  photos: Array<{
+    id: string;
+    file_path: string;
+    photo_order: number;
+  }>;
 }
 
 export const useMatching = () => {
@@ -37,7 +42,20 @@ export const useMatching = () => {
       });
 
       if (error) throw error;
-      setPotentialMatches(data || []);
+      
+      // Cast the photos from Json to the expected type
+      const matchesWithPhotos = (data || []).map(match => ({
+        ...match,
+        photos: Array.isArray(match.photos) ? 
+          match.photos.map((photo: any) => ({
+            id: photo.id,
+            file_path: photo.file_path,
+            photo_order: photo.photo_order
+          })) : 
+          []
+      })) as PotentialMatch[];
+      
+      setPotentialMatches(matchesWithPhotos);
       setCurrentMatchIndex(0);
     } catch (error) {
       console.error('Error loading matches:', error);

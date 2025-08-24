@@ -322,6 +322,7 @@ export type Database = {
           location_name: string
           occupation: string
           personality_match: number
+          photos: Json
           profile_picture_id: string
           user_id: string
         }[]
