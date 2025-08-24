@@ -2,12 +2,13 @@ import { useState } from "react";
 import { Menu, X, Settings, Heart, Bell, HelpCircle, BarChart3, Trophy, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { MasqueradeIcon } from "@/components/icons/MasqueradeIcon";
 
 export function HamburgerMenu() {
   const [isOpen, setIsOpen] = useState(false);
 
   const menuItems = [
-    { icon: Phone, label: "Live Calls with Matches", href: "/calls" },
+    { icon: Phone, label: "Live Calls (beta)", href: "/calls" },
     { icon: BarChart3, label: "Stats", href: "/stats" },
     { icon: Trophy, label: "Achievements", href: "/achievements" },
     { icon: Settings, label: "Settings", href: "/settings" },
@@ -33,14 +34,14 @@ export function HamburgerMenu() {
       >
         <SheetHeader className="border-b border-white/20 pb-6">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-gradient-primary rounded-full flex items-center justify-center">
-              <Heart className="h-6 w-6 text-white" />
+            <div className="w-12 h-12 bg-gradient-primary rounded-full flex items-center justify-center p-1">
+              <MasqueradeIcon className="w-full h-full text-white" />
             </div>
             <div>
               <SheetTitle className="text-lg font-semibold text-foreground">
-                LoveConnect
+                Masq
               </SheetTitle>
-              <p className="text-sm text-muted-foreground">Find your perfect match</p>
+              <p className="text-sm text-muted-foreground">Personality based matchmaking</p>
             </div>
           </div>
         </SheetHeader>

@@ -18,6 +18,7 @@ import Achievements from "./pages/Achievements";
 import Auth from "./pages/Auth";
 import ProfileSetup from "./pages/ProfileSetup";
 import Preferences from "./pages/Preferences";
+import Calls from "./pages/Calls";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -145,6 +146,7 @@ const AppRoutes = () => {
       <Route path="/profile" element={<TestRequiredRoute><ProfileRequiredRoute><Profile /></ProfileRequiredRoute></TestRequiredRoute>} />
       <Route path="/stats" element={<TestRequiredRoute><ProfileRequiredRoute><Stats /></ProfileRequiredRoute></TestRequiredRoute>} />
       <Route path="/achievements" element={<TestRequiredRoute><ProfileRequiredRoute><Achievements /></ProfileRequiredRoute></TestRequiredRoute>} />
+      <Route path="/calls" element={<TestRequiredRoute><ProfileRequiredRoute><Calls /></ProfileRequiredRoute></TestRequiredRoute>} />
       {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
       <Route path="*" element={<NotFound />} />
     </Routes>
