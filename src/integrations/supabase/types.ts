@@ -14,33 +14,116 @@ export type Database = {
   }
   public: {
     Tables: {
+      photos: {
+        Row: {
+          created_at: string | null
+          id: string
+          photo_order: number
+          photo_url: string
+          status: Database["public"]["Enums"]["photo_status"] | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          photo_order: number
+          photo_url: string
+          status?: Database["public"]["Enums"]["photo_status"] | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          photo_order?: number
+          photo_url?: string
+          status?: Database["public"]["Enums"]["photo_status"] | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "photos_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
+          age: number | null
+          age_range_max: number | null
+          age_range_min: number | null
+          bio: string | null
           created_at: string
+          dating_preference:
+            | Database["public"]["Enums"]["dating_preference"]
+            | null
+          education: string | null
           email: string | null
           full_name: string | null
           id: string
+          interests: string[] | null
           is_premium: boolean
+          latitude: number | null
+          location_name: string | null
+          longitude: number | null
+          max_distance: number | null
+          occupation: string | null
+          profile_complete: boolean | null
           role: Database["public"]["Enums"]["user_role"]
           updated_at: string
           user_id: string
         }
         Insert: {
+          age?: number | null
+          age_range_max?: number | null
+          age_range_min?: number | null
+          bio?: string | null
           created_at?: string
+          dating_preference?:
+            | Database["public"]["Enums"]["dating_preference"]
+            | null
+          education?: string | null
           email?: string | null
           full_name?: string | null
           id?: string
+          interests?: string[] | null
           is_premium?: boolean
+          latitude?: number | null
+          location_name?: string | null
+          longitude?: number | null
+          max_distance?: number | null
+          occupation?: string | null
+          profile_complete?: boolean | null
           role?: Database["public"]["Enums"]["user_role"]
           updated_at?: string
           user_id: string
         }
         Update: {
+          age?: number | null
+          age_range_max?: number | null
+          age_range_min?: number | null
+          bio?: string | null
           created_at?: string
+          dating_preference?:
+            | Database["public"]["Enums"]["dating_preference"]
+            | null
+          education?: string | null
           email?: string | null
           full_name?: string | null
           id?: string
+          interests?: string[] | null
           is_premium?: boolean
+          latitude?: number | null
+          location_name?: string | null
+          longitude?: number | null
+          max_distance?: number | null
+          occupation?: string | null
+          profile_complete?: boolean | null
           role?: Database["public"]["Enums"]["user_role"]
           updated_at?: string
           user_id?: string
@@ -55,6 +138,8 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
+      dating_preference: "men" | "women" | "both"
+      photo_status: "pending" | "approved" | "rejected"
       user_role: "admin" | "user"
     }
     CompositeTypes: {
@@ -183,6 +268,8 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      dating_preference: ["men", "women", "both"],
+      photo_status: ["pending", "approved", "rejected"],
       user_role: ["admin", "user"],
     },
   },
