@@ -17,27 +17,33 @@ export type Database = {
       photos: {
         Row: {
           created_at: string | null
+          file_path: string
+          file_size: number | null
           id: string
+          mime_type: string | null
           photo_order: number
-          photo_url: string
           status: Database["public"]["Enums"]["photo_status"] | null
           updated_at: string | null
           user_id: string | null
         }
         Insert: {
           created_at?: string | null
+          file_path?: string
+          file_size?: number | null
           id?: string
+          mime_type?: string | null
           photo_order: number
-          photo_url: string
           status?: Database["public"]["Enums"]["photo_status"] | null
           updated_at?: string | null
           user_id?: string | null
         }
         Update: {
           created_at?: string | null
+          file_path?: string
+          file_size?: number | null
           id?: string
+          mime_type?: string | null
           photo_order?: number
-          photo_url?: string
           status?: Database["public"]["Enums"]["photo_status"] | null
           updated_at?: string | null
           user_id?: string | null
@@ -54,10 +60,10 @@ export type Database = {
       }
       profiles: {
         Row: {
-          age: number | null
           age_range_max: number | null
           age_range_min: number | null
           bio: string | null
+          birthday: string | null
           created_at: string
           dating_preference:
             | Database["public"]["Enums"]["dating_preference"]
@@ -79,10 +85,10 @@ export type Database = {
           user_id: string
         }
         Insert: {
-          age?: number | null
           age_range_max?: number | null
           age_range_min?: number | null
           bio?: string | null
+          birthday?: string | null
           created_at?: string
           dating_preference?:
             | Database["public"]["Enums"]["dating_preference"]
@@ -104,10 +110,10 @@ export type Database = {
           user_id: string
         }
         Update: {
-          age?: number | null
           age_range_max?: number | null
           age_range_min?: number | null
           bio?: string | null
+          birthday?: string | null
           created_at?: string
           dating_preference?:
             | Database["public"]["Enums"]["dating_preference"]
@@ -135,7 +141,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      current_user_exists: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
+      }
+      get_current_user_role: {
+        Args: Record<PropertyKey, never>
+        Returns: Database["public"]["Enums"]["user_role"]
+      }
     }
     Enums: {
       dating_preference: "men" | "women" | "both"

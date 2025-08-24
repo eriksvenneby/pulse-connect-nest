@@ -4,9 +4,66 @@ import { Card } from "@/components/ui/card";
 import { HamburgerMenu } from "@/components/navigation/HamburgerMenu";
 import { TokenDisplay } from "@/components/navigation/TokenDisplay";
 import { BottomNavigation } from "@/components/navigation/BottomNavigation";
+import { calculateAge, getDisplayAge } from "@/utils/ageCalculator";
+import { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function Profile() {
+  const { user } = useAuth();
+  const [profile, setProfile] = useState<any>(null);
+  const [photos, setPhotos] = useState<any[]>([]);
+  
   const interests = ["Photography", "Travel", "Art", "Coffee", "Hiking", "Music", "Cooking", "Yoga"];
+  
+  useEffect(() => {
+    if (user) {
+      loadProfile();
+      loadPhotos();
+    }
+  }, [user]);
+
+  const loadProfile = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('user_id', user!.id)
+        .single();
+      
+      if (error) throw error;
+      setProfile(data);
+    } catch (error) {
+      console.error('Error loading profile:', error);
+    }
+  };
+
+  const loadPhotos = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('photos')
+        .select('*')
+        .eq('user_id', user!.id)
+        .order('photo_order');
+      
+      if (error) throw error;
+      setPhotos(data || []);
+    } catch (error) {
+      console.error('Error loading photos:', error);
+    }
+  };
+
+  if (!profile) {
+    return (
+      <div className="min-h-screen bg-gradient-soft pb-20 pt-0">
+        <div className="flex items-center justify-center h-full">
+          <div className="text-lg">Loading...</div>
+        </div>
+      </div>
+    );
+  }
+
+  const userAge = profile.birthday ? getDisplayAge(profile.birthday) : '?';
   
   return (
     <div className="min-h-screen bg-gradient-soft pb-20 pt-0">
@@ -38,10 +95,10 @@ export default function Profile() {
                 <Camera className="h-5 w-5" />
               </Button>
             </div>
-            <h2 className="text-2xl font-bold text-foreground mb-1">Alex, 28</h2>
+            <h2 className="text-2xl font-bold text-foreground mb-1">{profile.full_name || 'Your Name'}, {userAge}</h2>
             <div className="flex items-center justify-center gap-2 text-muted-foreground text-sm">
               <MapPin className="h-4 w-4" />
-              <span>San Francisco, CA</span>
+              <span>{profile.location_name || 'Your Location'}</span>
             </div>
           </div>
 
@@ -49,16 +106,16 @@ export default function Profile() {
             <div className="flex items-center gap-3 p-3 bg-gradient-soft rounded-lg">
               <Briefcase className="h-5 w-5 text-primary" />
               <div>
-                <p className="font-medium text-foreground">Software Engineer</p>
-                <p className="text-sm text-muted-foreground">at Google</p>
+                <p className="font-medium text-foreground">{profile.occupation || 'Add occupation'}</p>
+                <p className="text-sm text-muted-foreground">Your job title</p>
               </div>
             </div>
 
             <div className="flex items-center gap-3 p-3 bg-gradient-soft rounded-lg">
               <GraduationCap className="h-5 w-5 text-primary" />
               <div>
-                <p className="font-medium text-foreground">Computer Science</p>
-                <p className="text-sm text-muted-foreground">Stanford University</p>
+                <p className="font-medium text-foreground">{profile.education || 'Add education'}</p>
+                <p className="text-sm text-muted-foreground">Your education</p>
               </div>
             </div>
           </div>
@@ -66,14 +123,14 @@ export default function Profile() {
           <div className="mt-6">
             <h3 className="font-semibold text-foreground mb-3">About Me</h3>
             <p className="text-muted-foreground text-sm leading-relaxed">
-              Passionate about technology and adventure. Love exploring new places, trying different cuisines, and capturing moments through photography. Looking for someone to share life's beautiful experiences with! 📸✨
+              {profile.bio || "Tell people what makes you unique..."}
             </p>
           </div>
 
           <div className="mt-6">
             <h3 className="font-semibold text-foreground mb-3">Interests</h3>
             <div className="flex flex-wrap gap-2">
-              {interests.map((interest) => (
+              {(profile.interests || interests).map((interest: string) => (
                 <span 
                   key={interest}
                   className="bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-medium"

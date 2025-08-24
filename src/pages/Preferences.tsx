@@ -205,34 +205,46 @@ const Preferences = () => {
 
               <div className="space-y-3">
                 <Label>Age Range: {preferences.age_range_min} - {preferences.age_range_max}</Label>
-                <Slider
-                  value={[preferences.age_range_min, preferences.age_range_max]}
-                  onValueChange={([min, max]) =>
-                    setPreferences(prev => ({
-                      ...prev,
-                      age_range_min: min,
-                      age_range_max: max
-                    }))
-                  }
-                  min={18}
-                  max={80}
-                  step={1}
-                  className="w-full"
-                />
+                <div className="px-2">
+                  <Slider
+                    value={[preferences.age_range_min, preferences.age_range_max]}
+                    onValueChange={([min, max]) =>
+                      setPreferences(prev => ({
+                        ...prev,
+                        age_range_min: min,
+                        age_range_max: max
+                      }))
+                    }
+                    min={18}
+                    max={80}
+                    step={1}
+                    className="w-full"
+                  />
+                  <div className="flex justify-between text-xs text-muted-foreground mt-1">
+                    <span>18</span>
+                    <span>80</span>
+                  </div>
+                </div>
               </div>
 
               <div className="space-y-3">
                 <Label>Maximum Distance: {preferences.max_distance} miles</Label>
-                <Slider
-                  value={[preferences.max_distance]}
-                  onValueChange={([distance]) =>
-                    setPreferences(prev => ({ ...prev, max_distance: distance }))
-                  }
-                  min={1}
-                  max={100}
-                  step={1}
-                  className="w-full"
-                />
+                <div className="px-2">
+                  <Slider
+                    value={[preferences.max_distance]}
+                    onValueChange={([distance]) =>
+                      setPreferences(prev => ({ ...prev, max_distance: distance }))
+                    }
+                    min={1}
+                    max={100}
+                    step={1}
+                    className="w-full"
+                  />
+                  <div className="flex justify-between text-xs text-muted-foreground mt-1">
+                    <span>1 mile</span>
+                    <span>100+ miles</span>
+                  </div>
+                </div>
               </div>
             </CardContent>
           </Card>

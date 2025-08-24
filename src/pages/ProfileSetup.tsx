@@ -27,7 +27,7 @@ const ProfileSetup = () => {
 
   // Profile data
   const [profileData, setProfileData] = useState({
-    age: 25,
+    birthday: "",
     bio: "",
     occupation: "",
     education: "",
@@ -113,11 +113,27 @@ const ProfileSetup = () => {
       return;
     }
 
-    const newPhotos = [...photos, ...files];
+    // Validate file types and sizes
+    const validFiles = files.filter(file => {
+      const isValidType = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'].includes(file.type);
+      const isValidSize = file.size <= 5 * 1024 * 1024; // 5MB limit
+      
+      if (!isValidType || !isValidSize) {
+        toast({
+          variant: "destructive",
+          title: "Invalid file",
+          description: `${file.name} must be JPEG, PNG, or WebP and under 5MB.`,
+        });
+        return false;
+      }
+      return true;
+    });
+
+    const newPhotos = [...photos, ...validFiles];
     setPhotos(newPhotos);
 
     // Create previews
-    files.forEach(file => {
+    validFiles.forEach(file => {
       const reader = new FileReader();
       reader.onload = (e) => {
         setPhotoPreviews(prev => [...prev, e.target?.result as string]);
@@ -154,8 +170,6 @@ const ProfileSetup = () => {
 
     try {
       // Upload photos to storage
-      const photoUrls: string[] = [];
-      
       for (let i = 0; i < photos.length; i++) {
         const file = photos[i];
         const fileExt = file.name.split('.').pop();
@@ -167,18 +181,14 @@ const ProfileSetup = () => {
 
         if (uploadError) throw uploadError;
 
-        const { data: { publicUrl } } = supabase.storage
-          .from('profile-photos')
-          .getPublicUrl(fileName);
-
-        photoUrls.push(publicUrl);
-
-        // Insert photo record
+        // Insert photo record with file attachment info
         const { error: photoError } = await supabase
           .from('photos')
           .insert({
             user_id: user!.id,
-            photo_url: publicUrl,
+            file_path: fileName,
+            file_size: file.size,
+            mime_type: file.type,
             photo_order: i + 1,
             status: 'approved'
           });
@@ -287,18 +297,23 @@ const ProfileSetup = () => {
             {step === 2 && (
               <div className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="age">Age</Label>
+                  <Label htmlFor="birthday">Date of Birth</Label>
                   <Input
-                    id="age"
-                    type="number"
-                    min="18"
-                    max="100"
-                    value={profileData.age}
+                    id="birthday"
+                    type="date"
+                    max={new Date(Date.now() - 18 * 365.25 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]}
+                    value={profileData.birthday}
                     onChange={(e) => setProfileData(prev => ({
                       ...prev,
-                      age: parseInt(e.target.value) || 18
+                      birthday: e.target.value
                     }))}
+                    required
                   />
+                  {profileData.birthday && (
+                    <p className="text-sm text-muted-foreground">
+                      Age: {Math.floor((Date.now() - new Date(profileData.birthday).getTime()) / (365.25 * 24 * 60 * 60 * 1000))} years old
+                    </p>
+                  )}
                 </div>
                 
                 <div className="space-y-2">
@@ -373,34 +388,46 @@ const ProfileSetup = () => {
 
                 <div className="space-y-3">
                   <Label>Age Range: {profileData.age_range_min} - {profileData.age_range_max}</Label>
-                  <Slider
-                    value={[profileData.age_range_min, profileData.age_range_max]}
-                    onValueChange={([min, max]) =>
-                      setProfileData(prev => ({
-                        ...prev,
-                        age_range_min: min,
-                        age_range_max: max
-                      }))
-                    }
-                    min={18}
-                    max={80}
-                    step={1}
-                    className="w-full"
-                  />
+                  <div className="px-2">
+                    <Slider
+                      value={[profileData.age_range_min, profileData.age_range_max]}
+                      onValueChange={([min, max]) =>
+                        setProfileData(prev => ({
+                          ...prev,
+                          age_range_min: min,
+                          age_range_max: max
+                        }))
+                      }
+                      min={18}
+                      max={80}
+                      step={1}
+                      className="w-full"
+                    />
+                    <div className="flex justify-between text-xs text-muted-foreground mt-1">
+                      <span>18</span>
+                      <span>80</span>
+                    </div>
+                  </div>
                 </div>
 
                 <div className="space-y-3">
                   <Label>Maximum Distance: {profileData.max_distance} miles</Label>
-                  <Slider
-                    value={[profileData.max_distance]}
-                    onValueChange={([distance]) =>
-                      setProfileData(prev => ({ ...prev, max_distance: distance }))
-                    }
-                    min={1}
-                    max={100}
-                    step={1}
-                    className="w-full"
-                  />
+                  <div className="px-2">
+                    <Slider
+                      value={[profileData.max_distance]}
+                      onValueChange={([distance]) =>
+                        setProfileData(prev => ({ ...prev, max_distance: distance }))
+                      }
+                      min={1}
+                      max={100}
+                      step={1}
+                      className="w-full"
+                    />
+                    <div className="flex justify-between text-xs text-muted-foreground mt-1">
+                      <span>1 mile</span>
+                      <span>100+ miles</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             )}

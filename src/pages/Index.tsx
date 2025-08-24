@@ -4,6 +4,7 @@ import { Card } from "@/components/ui/card";
 import { HamburgerMenu } from "@/components/navigation/HamburgerMenu";
 import { TokenDisplay } from "@/components/navigation/TokenDisplay";
 import { BottomNavigation } from "@/components/navigation/BottomNavigation";
+import { calculateAge } from "@/utils/ageCalculator";
 import { useState } from "react";
 
 const Index = () => {
@@ -259,8 +260,9 @@ const Index = () => {
             size="icon" 
             variant="outline" 
             className="h-12 w-12 rounded-full border-accent/30 hover:bg-accent hover:text-white transition-all duration-300"
+            onClick={handleUndo}
           >
-            <Star className="h-5 w-5" />
+            <RotateCcw className="h-5 w-5" />
           </Button>
         </div>
       </div>
