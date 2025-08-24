@@ -21,7 +21,11 @@ const AppLogo = ({ size = "md", showText = true, className = "" }: AppLogoProps)
 
   return (
     <div className={`flex items-center gap-3 ${className}`}>
-      <MasqueradeIcon className={sizeClasses[size]} />
+      <img 
+        src="/lovable-uploads/eb3b3039-81e6-4411-98cd-08c4bb81eddd.png" 
+        alt="Masq Logo" 
+        className={`${sizeClasses[size]} object-contain`}
+      />
       {showText && (
         <span className={`font-bold bg-gradient-text bg-clip-text text-transparent ${textSizeClasses[size]}`}>
           Masq

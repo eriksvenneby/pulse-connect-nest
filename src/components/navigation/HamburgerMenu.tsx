@@ -34,8 +34,8 @@ export function HamburgerMenu() {
       >
         <SheetHeader className="border-b border-white/20 pb-6">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-gradient-primary rounded-full flex items-center justify-center p-1">
-              <MasqueradeIcon className="w-full h-full text-white" />
+            <div className="w-12 h-12 bg-gradient-primary rounded-full flex items-center justify-center p-2">
+              <img src="/lovable-uploads/eb3b3039-81e6-4411-98cd-08c4bb81eddd.png" alt="Masq Logo" className="w-full h-full object-contain" />
             </div>
             <div>
               <SheetTitle className="text-lg font-semibold text-foreground">
