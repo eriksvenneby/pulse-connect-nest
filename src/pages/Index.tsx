@@ -5,100 +5,23 @@ import { HamburgerMenu } from "@/components/navigation/HamburgerMenu";
 import { TokenDisplay } from "@/components/navigation/TokenDisplay";
 import { BottomNavigation } from "@/components/navigation/BottomNavigation";
 import { calculateAge } from "@/utils/ageCalculator";
+import { useMatching } from "@/hooks/useMatching";
+import { useProfilePhoto } from "@/hooks/useProfilePhoto";
 import { useState } from "react";
+import LoadingScreen from "@/components/LoadingScreen";
 
 const Index = () => {
-  const [currentMatch, setCurrentMatch] = useState(0);
-  
-  const matches = [
-    {
-      id: 1,
-      name: "Alex",
-      age: 26,
-      photos: [
-        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=600&fit=crop&crop=face",
-        "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=600&fit=crop&crop=face"
-      ],
-      distance: "3 miles away",
-      bio: "INTJ who loves deep conversations about philosophy and psychology. Looking for genuine connections beyond the surface.",
-      height: "5'10\"",
-      zodiac: "Virgo",
-      education: "NYU Graduate",
-      job: "Product Designer",
-      lookingFor: "Long-term relationship",
-      traits: ["Intellectual", "Ambitious", "Creative", "Authentic"],
-      personalityMatch: 87,
-      completedTests: 5,
-      isOnline: true,
-      prompts: [
-        { question: "My ideal Sunday", answer: "Coffee shop, good book, deep conversation with someone special" },
-        { question: "I'm looking for", answer: "Someone who values authenticity and isn't afraid of vulnerability" }
-      ]
-    },
-    {
-      id: 2,
-      name: "Jordan",
-      age: 24,
-      photos: [
-        "https://images.unsplash.com/photo-1494790108755-2616b612b589?w=400&h=600&fit=crop&crop=face",
-        "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400&h=600&fit=crop&crop=face"
-      ],
-      distance: "1 mile away",
-      bio: "ENFP seeking adventure and meaningful connections. Love hiking, art galleries, and philosophical debates over coffee.",
-      height: "5'6\"",
-      zodiac: "Gemini",
-      education: "Columbia University",
-      job: "Art Therapist",
-      lookingFor: "Something real",
-      traits: ["Adventurous", "Empathetic", "Artistic", "Open-minded"],
-      personalityMatch: 92,
-      completedTests: 7,
-      isOnline: false,
-      prompts: [
-        { question: "A life goal of mine", answer: "To help people heal through creativity and authentic expression" },
-        { question: "I value", answer: "Deep conversations that make you question everything you thought you knew" }
-      ]
-    },
-    {
-      id: 3,
-      name: "Casey",
-      age: 28,
-      photos: [
-        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=600&fit=crop&crop=face",
-        "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&h=600&fit=crop&crop=face"
-      ],
-      distance: "5 miles away",
-      bio: "ISFJ passionate about psychology and human behavior. Believes in the power of vulnerability and authentic connections.",
-      height: "6'1\"",
-      zodiac: "Cancer",
-      education: "Harvard PhD",
-      job: "Clinical Psychologist",
-      lookingFor: "Life partner",
-      traits: ["Caring", "Thoughtful", "Loyal", "Deep"],
-      personalityMatch: 84,
-      completedTests: 6,
-      isOnline: true,
-      prompts: [
-        { question: "My love language", answer: "Quality time and deep, meaningful conversations" },
-        { question: "I geek out on", answer: "Understanding what makes people tick and helping them grow" }
-      ]
-    }
-  ];
-
+  const { currentMatch, hasMoreMatches, loading, isSwipeProcessing, handleSwipe, handleUndo } = useMatching();
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
   
-  const currentPerson = matches[currentMatch];
-  const totalPhotos = currentPerson.photos.length;
+  // For demo purposes, create a photos array from profile picture
+  const { photoUrl } = useProfilePhoto(currentMatch?.profile_picture_id || null);
+  const photos = photoUrl ? [photoUrl] : ["https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=600&fit=crop&crop=face"];
+  
+  const totalPhotos = photos.length;
 
-  const handleSwipe = (direction: 'left' | 'right') => {
-    setCurrentMatch((prev) => (prev + 1) % matches.length);
-    setCurrentPhotoIndex(0); // Reset photo index for new person
-  };
-
-  const handleUndo = () => {
-    setCurrentMatch((prev) => (prev - 1 + matches.length) % matches.length);
-    setCurrentPhotoIndex(0);
-  };
+  const handleSwipeLeft = () => handleSwipe(false);
+  const handleSwipeRight = () => handleSwipe(true);
 
   const nextPhoto = () => {
     setCurrentPhotoIndex((prev) => (prev + 1) % totalPhotos);
@@ -107,6 +30,48 @@ const Index = () => {
   const prevPhoto = () => {
     setCurrentPhotoIndex((prev) => (prev - 1 + totalPhotos) % totalPhotos);
   };
+
+  if (loading) {
+    return <LoadingScreen message="Finding your perfect matches..." />;
+  }
+
+  if (!currentMatch || !hasMoreMatches) {
+    return (
+      <div className="min-h-screen bg-background pb-20 pt-0">
+        {/* Header */}  
+        <div className="flex items-center justify-between p-4 pt-12 bg-gradient-card">
+          <HamburgerMenu />
+          
+          <div className="text-center">
+            <h1 className="bg-gradient-text bg-clip-text text-transparent text-xl font-bold">Masq</h1>
+            <div className="flex items-center gap-1 text-muted-foreground text-sm">
+              <Shield className="h-3 w-3" />
+              <span>Personality first</span>
+            </div>
+          </div>
+
+          <TokenDisplay />
+        </div>
+
+        <div className="container max-w-md mx-auto px-4 py-8">
+          <Card className="w-full h-96 bg-gradient-card rounded-3xl shadow-glow-mystery overflow-hidden border-primary/20 flex items-center justify-center">
+            <div className="text-center p-6">
+              <h2 className="text-2xl font-bold text-foreground mb-4">No more matches!</h2>
+              <p className="text-muted-foreground mb-4">Check back later for new people to connect with.</p>
+              <Button onClick={() => window.location.reload()} className="bg-gradient-primary text-white">
+                Refresh
+              </Button>
+            </div>
+          </Card>
+        </div>
+
+        <BottomNavigation />
+      </div>
+    );
+  }
+
+  // Calculate age from birthday
+  const age = currentMatch.birthday ? calculateAge(currentMatch.birthday) : currentMatch.age || 'Unknown';
 
   return (
     <div className="min-h-screen bg-background pb-20 pt-0">
@@ -132,14 +97,14 @@ const Index = () => {
             {/* Photo Section */}
             <div className="h-[70%] relative overflow-hidden">
               <img 
-                src={currentPerson.photos[currentPhotoIndex]} 
-                alt={`${currentPerson.name} photo ${currentPhotoIndex + 1}`}
+                src={photos[currentPhotoIndex]} 
+                alt={`${currentMatch.full_name || 'User'} photo ${currentPhotoIndex + 1}`}
                 className="w-full h-full object-cover"
               />
               
               {/* Photo Navigation Overlay */}
               <div className="absolute inset-0 flex">
-                {currentPerson.photos.map((_, index) => (
+                {photos.map((_, index) => (
                   <div 
                     key={index}
                     className="flex-1 cursor-pointer"
@@ -150,7 +115,7 @@ const Index = () => {
               
               {/* Photo Indicators */}
               <div className="absolute top-3 left-3 right-3 flex gap-1">
-                {currentPerson.photos.map((_, index) => (
+                {photos.map((_, index) => (
                   <div 
                     key={index}
                     className={`flex-1 h-1 rounded-full transition-colors ${
@@ -160,30 +125,28 @@ const Index = () => {
                 ))}
               </div>
 
-              {/* Online Status */}
-              <div className="absolute top-4 right-4 bg-white/20 backdrop-blur-sm rounded-full px-3 py-1">
-                <span className="text-white text-sm font-medium">
-                  {currentPerson.isOnline ? 'Online' : 'Offline'}
-                </span>
-              </div>
+              {/* Distance/Location */}
+              {(currentMatch.distance_km || currentMatch.location_name) && (
+                <div className="absolute top-4 right-4 bg-white/20 backdrop-blur-sm rounded-full px-3 py-1">
+                  <span className="text-white text-sm font-medium">
+                    {currentMatch.distance_km ? `${Math.round(currentMatch.distance_km)} km away` : currentMatch.location_name}
+                  </span>
+                </div>
+              )}
               
               {/* Basic Info Overlay */}
               <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4 pb-2">
-                <h2 className="text-white text-2xl font-bold mb-1">{currentPerson.name}, {currentPerson.age}</h2>
-                <div className="flex items-center gap-4 text-white/90 text-sm mb-4">
-                  <span>{currentPerson.distance}</span>
-                  <span>•</span>
-                  <span>{currentPerson.height}</span>
-                  <span>•</span>
-                  <span>{currentPerson.zodiac}</span>
-                </div>
+                <h2 className="text-white text-2xl font-bold mb-1">
+                  {currentMatch.full_name || 'Anonymous'}, {age}
+                </h2>
                 
                 {/* Heart and X buttons */}
-                <div className="flex justify-between items-center">
+                <div className="flex justify-between items-center mt-4">
                   <Button 
                     size="icon" 
                     className="h-14 w-14 rounded-full bg-white/90 hover:bg-white shadow-lg relative"
-                    onClick={() => handleSwipe('left')}
+                    onClick={handleSwipeLeft}
+                    disabled={isSwipeProcessing}
                   >
                     <div className="h-10 w-10 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full flex items-center justify-center">
                       <X className="h-8 w-8 text-white" />
@@ -192,7 +155,8 @@ const Index = () => {
                   <Button 
                     size="icon" 
                     className="h-14 w-14 rounded-full bg-white/90 hover:bg-white shadow-lg relative"
-                    onClick={() => handleSwipe('right')}
+                    onClick={handleSwipeRight}
+                    disabled={isSwipeProcessing}
                   >
                     <div className="h-10 w-10 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full flex items-center justify-center">
                       <Heart className="h-8 w-8 text-white fill-white" />
@@ -205,55 +169,48 @@ const Index = () => {
             {/* Profile Details */}
             <div className="p-4 h-[30%] overflow-y-auto pt-6">
               {/* Job & Education */}
-              <div className="mb-3">
-                <div className="text-sm font-medium text-foreground">{currentPerson.job}</div>
-                <div className="text-xs text-muted-foreground">{currentPerson.education}</div>
-              </div>
+              {(currentMatch.occupation || currentMatch.education) && (
+                <div className="mb-3">
+                  {currentMatch.occupation && (
+                    <div className="text-sm font-medium text-foreground">{currentMatch.occupation}</div>
+                  )}
+                  {currentMatch.education && (
+                    <div className="text-xs text-muted-foreground">{currentMatch.education}</div>
+                  )}
+                </div>
+              )}
 
-              {/* Looking For */}
-              <div className="mb-3">
-                <span className="text-xs text-muted-foreground">Looking for: </span>
-                <span className="text-sm text-foreground">{currentPerson.lookingFor}</span>
-              </div>
+              {/* Bio */}
+              {currentMatch.bio && (
+                <div className="mb-3">
+                  <div className="text-sm text-foreground">{currentMatch.bio}</div>
+                </div>
+              )}
 
               {/* Personality Match */}
               <div className="mb-3 p-2 bg-primary/10 rounded-lg">
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-xs font-medium text-foreground">Personality Match</span>
-                  <span className="text-primary font-bold text-sm">{currentPerson.personalityMatch}%</span>
+                  <span className="text-primary font-bold text-sm">{currentMatch.personality_match}%</span>
                 </div>
                 <div className="w-full bg-secondary rounded-full h-1.5">
                   <div 
                     className="bg-gradient-primary h-1.5 rounded-full transition-all duration-300"
-                    style={{ width: `${currentPerson.personalityMatch}%` }}
+                    style={{ width: `${currentMatch.personality_match}%` }}
                   ></div>
                 </div>
               </div>
 
-              {/* Personality Traits */}
-              <div className="flex gap-1 flex-wrap mb-3">
-                {currentPerson.traits.map((trait, index) => (
-                  <span key={index} className="bg-primary/10 text-primary px-2 py-1 rounded-full text-xs font-medium">
-                    {trait}
-                  </span>
-                ))}
-              </div>
-
-              {/* Prompts */}
-              <div className="space-y-2 mb-3">
-                {currentPerson.prompts.map((prompt, index) => (
-                  <div key={index} className="bg-secondary/50 rounded-lg p-2">
-                    <div className="text-xs font-medium text-primary mb-1">{prompt.question}</div>
-                    <div className="text-xs text-foreground">{prompt.answer}</div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Test Status */}
-              <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                <Eye className="h-3 w-3" />
-                <span>{currentPerson.completedTests} personality tests completed</span>
-              </div>
+              {/* Interests */}
+              {currentMatch.interests && currentMatch.interests.length > 0 && (
+                <div className="flex gap-1 flex-wrap mb-3">
+                  {currentMatch.interests.map((interest, index) => (
+                    <span key={index} className="bg-primary/10 text-primary px-2 py-1 rounded-full text-xs font-medium">
+                      {interest}
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
           </Card>
         </div>
@@ -265,6 +222,7 @@ const Index = () => {
             variant="outline" 
             className="h-12 w-12 rounded-full border-accent/30 hover:bg-accent hover:text-white transition-all duration-300"
             onClick={handleUndo}
+            disabled={isSwipeProcessing}
           >
             <RotateCcw className="h-5 w-5" />
           </Button>
