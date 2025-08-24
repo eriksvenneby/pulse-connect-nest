@@ -169,6 +169,7 @@ export type Database = {
           profile_complete: boolean | null
           profile_picture_id: string | null
           role: Database["public"]["Enums"]["user_role"]
+          sex: string | null
           updated_at: string
           user_id: string
         }
@@ -195,6 +196,7 @@ export type Database = {
           profile_complete?: boolean | null
           profile_picture_id?: string | null
           role?: Database["public"]["Enums"]["user_role"]
+          sex?: string | null
           updated_at?: string
           user_id: string
         }
@@ -221,6 +223,7 @@ export type Database = {
           profile_complete?: boolean | null
           profile_picture_id?: string | null
           role?: Database["public"]["Enums"]["user_role"]
+          sex?: string | null
           updated_at?: string
           user_id?: string
         }

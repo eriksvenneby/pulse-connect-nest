@@ -8,15 +8,20 @@ import { BottomNavigation } from "@/components/navigation/BottomNavigation";
 import { ProfilePictureSelector } from "@/components/ProfilePictureSelector";
 import { calculateAge, getDisplayAge } from "@/utils/ageCalculator";
 import { handleSignOut } from "@/utils/authCleanup";
+import { useProfilePhoto } from "@/hooks/useProfilePhoto";
+import { useLogoCustomization } from "@/hooks/useLogoCustomization";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 export default function Profile() {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [profile, setProfile] = useState<any>(null);
   const [photos, setPhotos] = useState<any[]>([]);
-  const [profilePhoto, setProfilePhoto] = useState<any>(null);
+  const { photoUrl: profilePhotoUrl, loading: photoLoading } = useProfilePhoto(profile?.profile_picture_id);
+  const { selectedColor, setSelectedColor, logoColors } = useLogoCustomization();
   
   const interests = ["Photography", "Travel", "Art", "Coffee", "Hiking", "Music", "Cooking", "Yoga"];
   
@@ -27,11 +32,6 @@ export default function Profile() {
     }
   }, [user]);
 
-  useEffect(() => {
-    if (profile?.profile_picture_id) {
-      loadProfilePhoto();
-    }
-  }, [profile?.profile_picture_id]);
 
   const loadProfile = async () => {
     try {
@@ -63,22 +63,6 @@ export default function Profile() {
     }
   };
 
-  const loadProfilePhoto = async () => {
-    if (!profile?.profile_picture_id) return;
-    
-    try {
-      const { data, error } = await supabase
-        .from('photos')
-        .select('*')
-        .eq('id', profile.profile_picture_id)
-        .single();
-      
-      if (error) throw error;
-      setProfilePhoto(data);
-    } catch (error) {
-      console.error('Error loading profile photo:', error);
-    }
-  };
 
   const handleProfilePictureChange = (photoId: string) => {
     setProfile(prev => ({ ...prev, profile_picture_id: photoId }));
@@ -110,11 +94,14 @@ export default function Profile() {
           <div className="text-center mb-6">
             <div className="relative inline-block">
               <div className="w-32 h-32 bg-gradient-primary rounded-full flex items-center justify-center mx-auto mb-4 shadow-glow overflow-hidden">
-                {profilePhoto ? (
-                  <div className="w-full h-full bg-gradient-primary flex items-center justify-center text-white font-bold text-4xl">
-                    {/* Placeholder - replace with actual photo when storage is set up */}
-                    {profile.full_name?.charAt(0) || 'A'}
-                  </div>
+                {photoLoading ? (
+                  <span className="text-white font-bold text-lg">Loading...</span>
+                ) : profilePhotoUrl ? (
+                  <img 
+                    src={profilePhotoUrl} 
+                    alt="Profile" 
+                    className="w-full h-full object-cover rounded-full"
+                  />
                 ) : (
                   <span className="text-white font-bold text-4xl">
                     {profile.full_name?.charAt(0) || 'A'}
@@ -228,8 +215,31 @@ export default function Profile() {
           </div>
         </Card>
 
+        {/* Masq Color Selection */}
+        <Card className="p-4 mb-6 bg-white/80 backdrop-blur-sm border-white/20">
+          <h3 className="font-semibold text-foreground mb-4">Masq Color</h3>
+          <div className="grid grid-cols-6 gap-2 mb-4">
+            {logoColors.map((color) => (
+              <button
+                key={color}
+                onClick={() => setSelectedColor(color)}
+                className={`w-8 h-8 rounded-full border-2 transition-all ${
+                  selectedColor === color ? 'border-white shadow-lg scale-110' : 'border-gray-300'
+                }`}
+                style={{ backgroundColor: color }}
+              />
+            ))}
+          </div>
+          <p className="text-xs text-muted-foreground">This color will be used for your Masq logo</p>
+        </Card>
+
         <div className="space-y-3">
-          <Button variant="mystery" className="w-full" size="lg">
+          <Button 
+            variant="mystery" 
+            className="w-full" 
+            size="lg"
+            onClick={() => navigate('/edit-profile')}
+          >
             <Edit3 className="h-5 w-5 mr-2" />
             Edit Profile
           </Button>

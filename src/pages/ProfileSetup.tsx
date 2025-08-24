@@ -7,6 +7,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
 import { Slider } from "@/components/ui/slider";
 import { Badge } from "@/components/ui/badge";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
 import { useNavigate } from "react-router-dom";
@@ -28,6 +29,7 @@ const ProfileSetup = () => {
   // Profile data
   const [profileData, setProfileData] = useState({
     birthday: "",
+    sex: "",
     bio: "",
     occupation: "",
     education: "",
@@ -340,6 +342,24 @@ const ProfileSetup = () => {
                       education: e.target.value
                     }))}
                   />
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="sex">Sex</Label>
+                  <Select 
+                    value={profileData.sex} 
+                    onValueChange={(value) => setProfileData(prev => ({ ...prev, sex: value }))}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select your sex" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="male">Male</SelectItem>
+                      <SelectItem value="female">Female</SelectItem>
+                      <SelectItem value="non-binary">Non-binary</SelectItem>
+                      <SelectItem value="prefer-not-to-say">Prefer not to say</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
                 
                 <div className="space-y-2">

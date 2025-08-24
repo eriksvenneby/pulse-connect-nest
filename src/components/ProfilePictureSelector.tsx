@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Edit3, Check } from "lucide-react";
+import { useProfilePhoto } from "@/hooks/useProfilePhoto";
 
 interface ProfilePictureSelectorProps {
   photos: any[];
@@ -62,27 +63,48 @@ export const ProfilePictureSelector = ({
             </p>
           ) : (
             <div className="grid grid-cols-2 gap-3">
-              {photos.map((photo) => (
-                <Card 
-                  key={photo.id} 
-                  className={`relative overflow-hidden cursor-pointer transition-all hover:shadow-md ${
-                    currentProfilePictureId === photo.id ? 'ring-2 ring-primary' : ''
-                  }`}
-                  onClick={() => handleSelectPhoto(photo.id)}
-                >
-                  <div className="aspect-square bg-gradient-primary">
-                    {/* Placeholder for photo - you'll need to implement actual photo display */}
-                    <div className="w-full h-full flex items-center justify-center text-white font-bold text-2xl">
-                      P
+              {photos.map((photo) => {
+                const PhotoComponent = ({ photoId }: { photoId: string }) => {
+                  const { photoUrl, loading } = useProfilePhoto(photoId);
+                  
+                  return (
+                    <div className="aspect-square bg-gradient-primary overflow-hidden">
+                      {loading ? (
+                        <div className="w-full h-full flex items-center justify-center text-white font-bold text-2xl">
+                          Loading...
+                        </div>
+                      ) : photoUrl ? (
+                        <img 
+                          src={photoUrl} 
+                          alt="Profile" 
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-white font-bold text-2xl">
+                          P
+                        </div>
+                      )}
                     </div>
-                  </div>
-                  {currentProfilePictureId === photo.id && (
-                    <div className="absolute top-2 right-2 bg-primary rounded-full p-1">
-                      <Check className="h-4 w-4 text-white" />
-                    </div>
-                  )}
-                </Card>
-              ))}
+                  );
+                };
+
+                return (
+                  <Card 
+                    key={photo.id} 
+                    className={`relative overflow-hidden cursor-pointer transition-all hover:shadow-md ${
+                      currentProfilePictureId === photo.id ? 'ring-2 ring-primary' : ''
+                    }`}
+                    onClick={() => handleSelectPhoto(photo.id)}
+                  >
+                    <PhotoComponent photoId={photo.id} />
+                    {currentProfilePictureId === photo.id && (
+                      <div className="absolute top-2 right-2 bg-primary rounded-full p-1">
+                        <Check className="h-4 w-4 text-white" />
+                      </div>
+                    )}
+                  </Card>
+                );
+              })}
             </div>
           )}
           <Button 
