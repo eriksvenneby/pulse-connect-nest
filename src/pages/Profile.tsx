@@ -1,4 +1,4 @@
-import { Camera, Edit3, Settings, Heart, MapPin, Briefcase, GraduationCap } from "lucide-react";
+import { Camera, Edit3, Settings, Heart, MapPin, Briefcase, GraduationCap, Calendar, Clock, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
@@ -70,6 +70,52 @@ export default function Profile() {
                   {interest}
                 </span>
               ))}
+            </div>
+          </div>
+        </Card>
+
+        {/* Calendar Settings */}
+        <Card className="p-4 mb-6 bg-white/80 backdrop-blur-sm border-white/20">
+          <h3 className="font-semibold text-foreground mb-4 flex items-center gap-2">
+            <Calendar className="h-5 w-5 text-primary" />
+            Dating Availability
+          </h3>
+          
+          <div className="space-y-4">
+            <div>
+              <label className="text-sm font-medium text-foreground mb-2 block">Preferred Times</label>
+              <div className="grid grid-cols-2 gap-2">
+                {["Morning", "Afternoon", "Evening", "Late Night"].map((time) => (
+                  <button
+                    key={time}
+                    className="p-2 text-xs rounded-lg border border-primary/20 hover:bg-primary/10 text-foreground transition-all"
+                  >
+                    {time}
+                  </button>
+                ))}
+              </div>
+            </div>
+            
+            <div>
+              <label className="text-sm font-medium text-foreground mb-2 block">Available Days</label>
+              <div className="grid grid-cols-4 gap-1 text-xs">
+                {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((day) => (
+                  <button
+                    key={day}
+                    className="p-2 rounded border border-primary/20 hover:bg-primary/10 text-foreground transition-all"
+                  >
+                    {day}
+                  </button>
+                ))}
+              </div>
+            </div>
+            
+            <div className="flex items-center gap-3 p-3 bg-gradient-soft rounded-lg">
+              <Clock className="h-5 w-5 text-primary" />
+              <div>
+                <p className="font-medium text-foreground text-sm">Call Duration Preference</p>
+                <p className="text-xs text-muted-foreground">6-15 minutes ideal</p>
+              </div>
             </div>
           </div>
         </Card>

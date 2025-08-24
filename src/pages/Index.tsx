@@ -1,4 +1,4 @@
-import { Heart, X, Star, Shield, Eye, EyeOff, RotateCcw } from "lucide-react";
+import { Heart, X, Star, Shield, Eye, EyeOff, RotateCcw, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { HamburgerMenu } from "@/components/navigation/HamburgerMenu";
@@ -160,6 +160,24 @@ const Index = () => {
                 ))}
               </div>
 
+              {/* Heart and X buttons */}
+              <div className="absolute top-4 left-4 flex gap-2">
+                <Button 
+                  size="icon" 
+                  className="h-12 w-12 rounded-full bg-white/90 hover:bg-white border-2 border-red-500 shadow-lg"
+                  onClick={() => handleSwipe('left')}
+                >
+                  <X className="h-6 w-6 text-red-500" />
+                </Button>
+                <Button 
+                  size="icon" 
+                  className="h-12 w-12 rounded-full bg-white/90 hover:bg-white border-2 border-green-500 shadow-lg"
+                  onClick={() => handleSwipe('right')}
+                >
+                  <Heart className="h-6 w-6 text-green-500" />
+                </Button>
+              </div>
+
               {/* Online Status */}
               <div className="absolute top-4 right-4 bg-white/20 backdrop-blur-sm rounded-full px-3 py-1">
                 <span className="text-white text-sm font-medium">
@@ -237,16 +255,7 @@ const Index = () => {
         </div>
 
         {/* Action Buttons */}
-        <div className="flex justify-center items-center gap-6">
-          <Button 
-            size="icon" 
-            variant="outline" 
-            className="h-14 w-14 rounded-full border-destructive/30 hover:bg-destructive hover:text-white transition-all duration-300"
-            onClick={() => handleSwipe('left')}
-          >
-            <X className="h-6 w-6" />
-          </Button>
-          
+        <div className="flex justify-center items-center gap-4">
           <Button 
             size="icon" 
             variant="outline" 
@@ -256,12 +265,12 @@ const Index = () => {
           </Button>
 
           <Button 
-            size="icon" 
             variant="mystery" 
-            className="h-16 w-16 rounded-full animate-pulse-glow"
-            onClick={() => handleSwipe('right')}
+            className="px-6 py-3 rounded-full flex items-center gap-2 animate-pulse-glow"
+            onClick={() => {/* TODO: Implement chat now functionality */}}
           >
-            <Heart className="h-7 w-7" />
+            <MessageCircle className="h-5 w-5" />
+            Chat Now
           </Button>
         </div>
       </div>
