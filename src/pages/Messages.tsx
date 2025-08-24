@@ -1,6 +1,7 @@
 import { Search, MessageCircle, Clock } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
+import { BottomNavigation } from "@/components/navigation/BottomNavigation";
 
 export default function Messages() {
   const conversations = [
@@ -88,6 +89,8 @@ export default function Messages() {
           </div>
         </div>
       </div>
+
+      <BottomNavigation />
     </div>
   );
 }

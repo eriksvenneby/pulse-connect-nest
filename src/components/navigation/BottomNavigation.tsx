@@ -1,4 +1,4 @@
-import { Heart, Brain, Calendar, MessageCircle, User } from "lucide-react";
+import { Heart, Brain, MessageCircle, User } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 
 export function BottomNavigation() {
@@ -7,7 +7,6 @@ export function BottomNavigation() {
   const navItems = [
     { icon: Heart, label: "Swipe", path: "/", gradient: "from-primary to-accent" },
     { icon: Brain, label: "Tests", path: "/tests", gradient: "from-accent to-primary-glow" },
-    { icon: Calendar, label: "Calendar", path: "/calendar", gradient: "from-primary-glow to-primary" },
     { icon: MessageCircle, label: "Messages", path: "/messages", gradient: "from-accent to-primary", locked: true },
     { icon: User, label: "Profile", path: "/profile", gradient: "from-primary to-accent" }
   ];

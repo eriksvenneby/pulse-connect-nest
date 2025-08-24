@@ -107,9 +107,9 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background pb-20 pt-6">
-      {/* Header */}
-      <div className="flex items-center justify-between p-6 bg-gradient-card">
+    <div className="min-h-screen bg-background pb-20 pt-0">
+      {/* Header */}  
+      <div className="flex items-center justify-between p-4 pt-12 bg-gradient-card">
         <HamburgerMenu />
         
         <div className="text-center">
@@ -127,10 +127,10 @@ const Index = () => {
 
       <div className="container max-w-md mx-auto px-4">
         {/* Match Card */}
-        <div className="relative h-[600px] flex items-center justify-center mb-6">
-          <Card className="w-full max-w-sm bg-gradient-card rounded-3xl shadow-glow-mystery overflow-hidden border-primary/20">
+        <div className="relative h-[calc(100vh-180px)] flex items-center justify-center mb-6">
+          <Card className="w-full h-full bg-gradient-card rounded-3xl shadow-glow-mystery overflow-hidden border-primary/20">
             {/* Photo Section */}
-            <div className="h-96 relative overflow-hidden">
+            <div className="h-[70%] relative overflow-hidden">
               <img 
                 src={currentPerson.photos[currentPhotoIndex]} 
                 alt={`${currentPerson.name} photo ${currentPhotoIndex + 1}`}
@@ -161,20 +161,22 @@ const Index = () => {
               </div>
 
               {/* Heart and X buttons */}
-              <div className="absolute top-4 left-4 flex gap-2">
+              <div className="absolute bottom-4 left-4">
                 <Button 
                   size="icon" 
-                  className="h-12 w-12 rounded-full bg-white/90 hover:bg-white border-2 border-red-500 shadow-lg"
+                  className="h-14 w-14 rounded-full bg-white/90 hover:bg-white shadow-lg"
                   onClick={() => handleSwipe('left')}
                 >
-                  <X className="h-6 w-6 text-red-500" />
+                  <X className="h-8 w-8 text-red-500" />
                 </Button>
+              </div>
+              <div className="absolute bottom-4 right-4">
                 <Button 
                   size="icon" 
-                  className="h-12 w-12 rounded-full bg-white/90 hover:bg-white border-2 border-green-500 shadow-lg"
+                  className="h-14 w-14 rounded-full bg-white/90 hover:bg-white shadow-lg"
                   onClick={() => handleSwipe('right')}
                 >
-                  <Heart className="h-6 w-6 text-green-500" />
+                  <Heart className="h-7 w-7 text-green-500 fill-green-500" />
                 </Button>
               </div>
 
@@ -199,7 +201,7 @@ const Index = () => {
             </div>
 
             {/* Profile Details */}
-            <div className="p-4 max-h-[200px] overflow-y-auto">
+            <div className="p-4 h-[30%] overflow-y-auto">
               {/* Job & Education */}
               <div className="mb-3">
                 <div className="text-sm font-medium text-foreground">{currentPerson.job}</div>
