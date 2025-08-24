@@ -1,5 +1,5 @@
 import LoadingScreen from "@/components/LoadingScreen";
-import { Camera, Edit3, Settings, Heart, MapPin, Briefcase, GraduationCap, Calendar, Clock, Users, Pencil } from "lucide-react";
+import { Camera, Edit3, Settings, Heart, MapPin, Briefcase, GraduationCap, Calendar, Clock, Users, Pencil, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { HamburgerMenu } from "@/components/navigation/HamburgerMenu";
@@ -7,6 +7,7 @@ import { TokenDisplay } from "@/components/navigation/TokenDisplay";
 import { BottomNavigation } from "@/components/navigation/BottomNavigation";
 import { ProfilePictureSelector } from "@/components/ProfilePictureSelector";
 import { calculateAge, getDisplayAge } from "@/utils/ageCalculator";
+import { handleSignOut } from "@/utils/authCleanup";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -236,6 +237,16 @@ export default function Profile() {
           <Button variant="masq" className="w-full" size="lg">
             <Settings className="h-5 w-5 mr-2" />
             Settings
+          </Button>
+          
+          <Button 
+            variant="outline" 
+            className="w-full border-red-500/20 text-red-600 hover:bg-red-500/10 hover:text-red-700" 
+            size="lg"
+            onClick={handleSignOut}
+          >
+            <LogOut className="h-5 w-5 mr-2" />
+            Sign Out
           </Button>
         </div>
 
